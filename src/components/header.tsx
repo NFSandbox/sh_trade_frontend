@@ -1,7 +1,9 @@
-import {FlexDiv, Container} from "@/components/container";
+import { FlexDiv, Container } from "@/components/container";
 import Link from "next/link";
-import {classNames} from "@/tools/css_tools";
+import { classNames } from "@/tools/css_tools";
 import React from "react";
+
+
 
 interface HeaderProps {
   /**
@@ -22,7 +24,7 @@ interface HeaderProps {
  * Header components.
  */
 export function Header(props: HeaderProps) {
-  let {
+  const {
     link,
     children,
     content,

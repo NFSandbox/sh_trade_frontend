@@ -1,13 +1,22 @@
-// Components
-import { FlexDiv, Center } from '@/components/container';
-
 import type { Metadata } from "next";
 
+// Config
+import * as gene_config from '@/config/general';
+
+// Components
+import { Center } from '@/components/container';
+
+// Parts
+import * as clients from './client';
+
+
 export const metadata: Metadata = {
-    title: 'Home - AHUER.COM',
-    description: 'Period usage info - Showing usage statistics in specific time range.'
+    title: `主页 - ${gene_config.appName}`,
+    description: `${gene_config.appDesc}`
 }
 
 export default function Home() {
-    return (<Center>Welcome!</Center>);
+    return (<Center>
+        <clients.LayoutTests />
+    </Center>);
 }
