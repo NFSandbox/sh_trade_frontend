@@ -5,15 +5,15 @@ import { FlexDiv, Center } from '@/components/container';
 import { Button, Input } from 'antd';
 
 // States
-import { useLayoutStateStore } from '@/state/layoutState';
-import { useLayoutEffect } from 'react';
+import { useLayoutStateStore } from '@/states/layoutState';
+import { useEffect, useLayoutEffect } from 'react';
 
 export function LayoutTests() {
   const setTitle = useLayoutStateStore((st) => st.setTitle);
   const setHeaderVisibility = useLayoutStateStore((st) => st.setShowHeader);
   const state = useLayoutStateStore(st => st);
 
-  useLayoutEffect(function () {
+  useEffect(function () {
     setTitle('主页');
   }, []);
 

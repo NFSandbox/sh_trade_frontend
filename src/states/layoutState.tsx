@@ -12,6 +12,7 @@ import * as gene_config from '@/config/general';
 export interface LayoutStates {
   showHeader: boolean;
   title?: string;
+  displayTitle?: string;
 }
 
 export interface LayoutActions {
@@ -30,14 +31,18 @@ export interface LayoutActions {
 }
 
 export const useLayoutStateStore = create<LayoutStates & LayoutActions>()(
-  immer(
+  persist(immer(
     (set, get) => ({
       showHeader: true,
       title: undefined,
+      displayTitle: `${gene_config.appName}`,
 
       setTitle(title) {
         set((state) => {
           state.title = title;
+        });
+        set((state) => {
+          state.displayTitle = get().getHeaderDispalyTitle();
         })
       },
 
@@ -57,5 +62,7 @@ export const useLayoutStateStore = create<LayoutStates & LayoutActions>()(
         return str;
       },
     }
-    )),
+    )), {
+    name: 'layout_settings', // name of the item in the storage (must be unique)
+  },),
 );
