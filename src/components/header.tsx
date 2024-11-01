@@ -24,14 +24,24 @@ interface HeaderProps {
  * Header components.
  */
 export function Header(props: HeaderProps) {
-  const {
+  let {
     link,
     children,
     content,
   } = props;
 
+  if (link) {
+    children = (
+      <Link
+        href={link ?? '#'}
+        className={classNames(
+          'hover:no-underline',
+        )}>
+        {children}
+      </Link>);
+  }
+
   return (
-    // Responsive Margin
     <FlexDiv
       className={classNames(
         'w-full z-10',
@@ -44,17 +54,10 @@ export function Header(props: HeaderProps) {
           'bg-fgcolor dark:bg-fgcolor-dark',
           'w-full p-2 shadow-lg',
           'transition-all',
-          'flex-row justify-between',
+          'flex-row justify-between items-center',
         )}>
 
-        {/*Link Wrapper For Children Content*/}
-        <Link
-          href={link ?? '#'}
-          className={classNames(
-            'hover:no-underline hover:scale-[1.02]',
-          )}>
-          {children}
-        </Link>
+        {children}
 
         <FlexDiv>
           {content}

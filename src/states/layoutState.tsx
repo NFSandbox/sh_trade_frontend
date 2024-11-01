@@ -8,6 +8,7 @@ import { useStore } from './useStore';
 
 // Configs
 import * as gene_config from '@/config/general';
+import { useEffect } from 'react';
 
 export interface LayoutStates {
   showHeader: boolean;
@@ -30,8 +31,8 @@ export interface LayoutActions {
   getHeaderDispalyTitle: () => string;
 }
 
-export const useLayoutStateStore = create<LayoutStates & LayoutActions>()(
-  persist(immer(
+export const useLayoutState = create<LayoutStates & LayoutActions>()(
+  immer(
     (set, get) => ({
       showHeader: true,
       title: undefined,
@@ -62,7 +63,15 @@ export const useLayoutStateStore = create<LayoutStates & LayoutActions>()(
         return str;
       },
     }
-    )), {
-    name: 'layout_settings', // name of the item in the storage (must be unique)
-  },),
+    ))
 );
+
+/**
+ * React hook that set the title of the header.
+ */
+export function useHeaderTitle(title?: string) {
+  const setTitle = useLayoutState((st) => st.setTitle);
+  useEffect(function () {
+    setTitle(title);
+  }, []);
+}
