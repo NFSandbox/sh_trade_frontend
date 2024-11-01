@@ -1,17 +1,28 @@
-'use client';
-
 import { Inter } from "next/font/google";
 import "./globals.css";
-
-// Components
-import { ResponsiveLayout } from "@/cus_components/layout";
+import type { Metadata } from "next";
 
 const inter = Inter({ subsets: ["latin"] });
 
-// export const metadata: Metadata = {
-//   title: gene_config.appName,
-//   description: gene_config.appDesc,
-// };
+import React from "react";
+import { Toaster } from "react-hot-toast";
+import { AntdRegistry } from '@ant-design/nextjs-registry';
+
+
+
+// Components
+import { AdaptiveBackground } from '@/components/background';
+import { ResponsiveLayout } from "@/cus_components/layout";
+
+// Configs
+import * as gene_config from '@/config/general';
+
+
+export const metadata: Metadata = {
+  title: gene_config.appName,
+  description: gene_config.appDesc,
+};
+
 
 export default function RootLayout(
   {
@@ -22,8 +33,14 @@ export default function RootLayout(
   return (
     <html lang="en">
       <body className={inter.className}>
-        {/*Add Ant Registry to avoid first loading page flicker*/}
-        <ResponsiveLayout>{children}</ResponsiveLayout>
+        <AntdRegistry>
+          <AdaptiveBackground>
+            <Toaster />
+            {/* {children} */}
+            <ResponsiveLayout>{children}</ResponsiveLayout>
+          </AdaptiveBackground>
+        </AntdRegistry>
+
       </body>
     </html>
   );

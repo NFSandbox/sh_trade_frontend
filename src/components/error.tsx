@@ -1,19 +1,13 @@
 'use client';
 
-import React, {ReactNode, useEffect, useState} from "react";
-import toast from 'react-hot-toast';
-import {Form, Segmented, Tooltip, Input, Button, SegmentedProps, Switch, Flex, Skeleton} from 'antd';
-import Link from 'next/link';
+import React, { ReactNode, useEffect, useState } from "react";
+import { Skeleton } from 'antd';
 
-import {classNames} from "@/tools/css_tools";
-import {setDefault} from "@/tools/set_default";
 
-import {backendBaseUrl} from '@/config/general';
+import { classNames } from "@/tools/css_tools";
+import { setDefault } from "@/tools/set_default";
 
-import {FlexDiv, Container, Center} from '@/components/container';
-import {Header, HeaderTitle} from '@/components/header';
-import {BalanceInfoBlock, StatisticBlock,} from '@/cus_components/balance';
-import {RecentUsageLineChart, PeriodUsageList} from '@/cus_components/records';
+import { FlexDiv, Container, Center } from '@/components/container';
 
 
 interface ErrorCardProps {
@@ -42,9 +36,9 @@ export function ErrorCard(props: ErrorCardProps) {
 
         {/*Error Description Part (If have description)*/}
         {props.description !== undefined &&
-            <p className={classNames(
-              'text-black/50 dark:text-white/50'
-            )}>{props.description}</p>}
+          <p className={classNames(
+            'text-black/50 dark:text-white/50'
+          )}>{props.description}</p>}
       </FlexDiv>
     </Center>
   );
@@ -55,7 +49,7 @@ export function LoadingSkeleton() {
     <Center className={classNames(
       'p-2',
     )}>
-      <Skeleton active/>
+      <Skeleton active />
     </Center>
   );
 }

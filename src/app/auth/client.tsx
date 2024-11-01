@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { redirect } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 
 // Supertokens
 import { signUp, signIn } from "supertokens-web-js/recipe/emailpassword";
@@ -116,6 +116,8 @@ async function signInClicked(email: string, password: string) {
 
 
 export function SignIn() {
+  const router = useRouter();
+
   const [isSignUp, setIsSignUp] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   useHeaderTitle('登录 & 注册');
@@ -130,7 +132,8 @@ export function SignIn() {
       }
 
       await asyncSleep(1000);
-      window.location.assign('/');
+      router.push('/');
+
     } catch (e) {
       ;
     } finally {
@@ -139,11 +142,13 @@ export function SignIn() {
   };
 
   return (
-    <Container className={classNames(
-      'p-4 m-2 w-[30rem]',
-      'justify-center',
-      'rounded-2xl shadow-2xl',
-    )}>
+    <Container
+      rounded={false}
+      className={classNames(
+        'p-4 m-2 w-[30rem]',
+        'justify-center',
+        'rounded-2xl shadow-2xl',
+      )}>
       <FlexDiv className={classNames(
         'flex-col gap-y-2 justify-start items-start',
         'w-full',
@@ -154,6 +159,7 @@ export function SignIn() {
           <h2 className={classNames(
             'text-2xl', 'text-primary dark:text-primary-light',
             'self-center',
+            'opacity-80',
           )}>{isSignUp ? '注册' : '登录'} AHUER.COM</h2>
         </FlexDiv>
         <Form

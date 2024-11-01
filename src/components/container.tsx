@@ -1,11 +1,11 @@
 'use client';
 
 // Fundamentals
-import React, {AriaRole, CSSProperties} from "react";
+import React, { AriaRole, CSSProperties } from "react";
 
 // Tools
-import {classNames} from "@/tools/css_tools";
-import {setDefault} from '@/tools/set_default';
+import { classNames } from "@/tools/css_tools";
+import { setDefault } from '@/tools/set_default';
 
 
 interface ContainerProps {
@@ -246,7 +246,7 @@ export function FlexDiv(
  * Notice:
  * - This component is expansive
  */
-export function Center({children, className}: { children: React.ReactNode, className?: string }) {
+export function Center({ children, className }: { children: React.ReactNode, className?: string }) {
   return (
     <FlexDiv
       expand={true}
@@ -265,7 +265,7 @@ interface DividerProps {
 /**
  * Horizonal divider component
  */
-export function Divider({className}: DividerProps) {
+export function Divider({ className }: DividerProps) {
   return (<hr className={classNames(
     'opacity-10',
     className ?? '',

@@ -23,12 +23,15 @@ export class NetworkError extends BaseError {
   }
 }
 
-export function responseErrorThrower(response: any) {
-  if (response?.data?.detail?.error == true) {
-    console.log('in res err thrower')
-    const name = response.data.detail.name ?? 'unknown_error';
-    const message = response.data.detail.message ?? 'Unknown error occurred.';
-    throw new BaseError(name, message);
+export function getBackendErrorFromResponse(response: any): BaseError | undefined {
+  try {
+    if (response.data.detail.error === true) {
+      const name = response.data.detail.name;
+      const message = response.data.detail.message;
+      return new BaseError(name, message);
+    }
+  } catch (e) {
+    return undefined;
   }
 }
 
@@ -39,6 +42,10 @@ export function responseErrorThrower(response: any) {
 export function apiErrorThrower(e: any) {
   // if it's an Axios Error, and server response with status code out of 2xx range.
   if (e.response) {
+    const backendError = getBackendErrorFromResponse(e.response);
+    if (backendError !== undefined) {
+      throw backendError;
+    }
 
     // if backend doesn't give any further info
     // throw request_error

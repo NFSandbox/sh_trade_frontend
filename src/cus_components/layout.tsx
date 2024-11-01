@@ -1,33 +1,37 @@
 'use client';
 
-import React from "react";
-import { Toaster } from "react-hot-toast";
-import { AntdRegistry } from '@ant-design/nextjs-registry';
+import React, { ReactNode } from "react";
 import Link from "next/link";
 
 // Supertokens
 // import SuperTokens from 'supertokens-web-js';
-import SuperTokens, { SuperTokensWrapper } from "supertokens-auth-react";
-import EmailPassword from "supertokens-auth-react/recipe/emailpassword";
-import Session from "supertokens-auth-react/recipe/session";
-import { EmailPasswordPreBuiltUI } from 'supertokens-auth-react/recipe/emailpassword/prebuiltui';
-import { canHandleRoute, getRoutingComponent } from "supertokens-auth-react/ui";
+import SuperTokens from 'supertokens-web-js';
+import Session from 'supertokens-web-js/recipe/session';
+import EmailPassword from 'supertokens-web-js/recipe/emailpassword'
+
+import { PiSignOut } from "react-icons/pi";
+import { AiOutlineInbox } from "react-icons/ai";
 
 // Components
-import { AdaptiveBackground } from '@/components/background';
 import { Header } from "@/components/header";
-import { FlexDiv } from "@/components/container";
-import { Divider } from 'antd';
+import { Container, FlexDiv } from "@/components/container";
+import { Divider, Popover, Avatar, Button, ButtonProps } from 'antd';
+import { AiOutlineUser, AiOutlineNotification } from "react-icons/ai";
+import { IoMdNotificationsOutline } from "react-icons/io";
+
+
+// Apis
+import { getMe, useGetMe } from '@/api/auth';
 
 // states
 import { useLayoutState } from "@/states/layoutState";
-import { useStore } from "@/states/useStore";
 
 // configs
 import * as gene_config from '@/config/general';
 
 // Tools
 import { classNames } from "@/tools/css_tools";
+import { errorPopper } from "@/exceptions/error";
 
 // Supertokens init
 if (typeof window !== 'undefined') {
@@ -36,9 +40,7 @@ if (typeof window !== 'undefined') {
       // learn more about this on https://supertokens.com/docs/emailpassword/appinfo
       appName: "AHUER.COM",
       apiDomain: gene_config.backendBaseUrl,
-      websiteDomain: "http://localhost:3000",
       apiBasePath: "/auth",
-      websiteBasePath: "/auth",
     },
     recipeList: [
       EmailPassword.init(),
@@ -46,7 +48,6 @@ if (typeof window !== 'undefined') {
     ]
   });
 }
-
 
 interface ResponsiveLayoutProps {
   children: React.ReactNode;
@@ -60,22 +61,12 @@ export function ResponsiveLayout({ children }: ResponsiveLayoutProps) {
 
   // use layout store
   const isHeaderVisible = useLayoutState((st) => st.showHeader);
-  // this is used to trigger layout header refresh
-  // if (canHandleRoute([EmailPasswordPreBuiltUI])) {
-  //   // This renders the login UI on the /auth route
-  //   return getRoutingComponent([EmailPasswordPreBuiltUI])
-  // }
 
   return (
-    <AntdRegistry>
-      <AdaptiveBackground>
-        <SuperTokensWrapper>
-          <Toaster />
-          {isHeaderVisible == true && <CusHeader></CusHeader>}
-          {children}
-        </SuperTokensWrapper>
-      </AdaptiveBackground>
-    </AntdRegistry>
+    <>
+      {isHeaderVisible == true && <CusHeader></CusHeader>}
+      {children}
+    </>
   );
 }
 
@@ -83,7 +74,7 @@ function CusHeader() {
   const title = useLayoutState((st) => st.title);
 
   return (
-    <Header>
+    <Header content={<HeaderContent />}>
       <FlexDiv className={classNames(
         'flex-row gap-x-2',
         'items-center'
@@ -103,5 +94,89 @@ function CusHeader() {
         {title && <h2 className={classNames('text-xl text-light text-black/50 dark:text-white/50')}>{title}</h2>}
       </FlexDiv>
     </Header>
+  );
+}
+
+function HeaderContent() {
+  return (
+    <FlexDiv className={classNames(
+      'flex-none flex-row gap-x-2 justify-center items-center px-2',
+    )}>
+      <UserAvatar />
+    </FlexDiv>
+  );
+}
+
+function HoverMenuButton({ children, href, ...args }: { href?: string, children: ReactNode } & ButtonProps) {
+  let retBtn = (
+    <Button key={href ?? undefined} variant="text" color="default" className="w-full" {...args}>
+      <FlexDiv className="w-full justify-start">
+        {children}
+      </FlexDiv>
+    </Button>
+  );
+
+  if (href) {
+    retBtn = <Link href={href}>{retBtn}</Link>
+  }
+
+  return retBtn;
+}
+
+function UserAvatar() {
+  const {
+    data: userInfo,
+    isLoading: userInfoIsLoading,
+    error: userInfoError,
+  } = useGetMe();
+
+
+
+  const hoverMenu = (
+    <FlexDiv
+      textEllipsis={true}
+      className={classNames(
+        'flex-none flex-col gap-y-2',
+        'overflow-hidden',
+        'w-[15rem]',
+      )}>
+      <p className="text-lg">{userInfo?.username}</p>
+      <p className="opacity-70"><span>UserID: </span><span className="font-mono">{userInfo?.user_id}</span></p>
+
+      <FlexDiv className="flex-col flex-none pt-2">
+        <HoverMenuButton href='/user' icon={<AiOutlineUser size={20} />}>个人资料</HoverMenuButton>
+        <HoverMenuButton href='/published' icon={<AiOutlineInbox size={20} />}>我的发布</HoverMenuButton>
+        <HoverMenuButton href='/notifications' icon={<IoMdNotificationsOutline size={20} />}>通知</HoverMenuButton>
+        <HoverMenuButton href='/auth/signout' color='danger' icon={<PiSignOut size={20} />}>退出登录</HoverMenuButton>
+      </FlexDiv>
+    </FlexDiv>
+  );
+
+  if (userInfoError) {
+    errorPopper(userInfoError);
+  }
+
+  if (userInfo) {
+    // return <p className={classNames(
+    //   userInfoIsLoading ? 'opacity-50' : '',
+    // )}><Link href='/auth/signout'><span>注销</span></Link></p>;
+    return <Popover
+      trigger='hover'
+      placement='bottomRight'
+      content={hoverMenu}
+      arrow={false}
+    >
+      <button className={classNames(
+        userInfoIsLoading ? 'opacity-50' : '',
+      )}>
+        <Avatar size={'large'} gap={0}>{userInfo.username.substring(0, 3)}</Avatar>
+      </button>
+    </Popover>;
+  }
+
+  return (
+    <Link href='/auth' className={classNames(
+      userInfoIsLoading ? 'opacity-50' : '',
+    )}><p>登录 / 注册</p></Link>
   );
 }

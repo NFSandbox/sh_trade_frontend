@@ -1,7 +1,9 @@
 import useSWR, { mutate } from "swr";
 
+import Session from "supertokens-web-js/recipe/session";
+
 import { axiosIns } from './axios';
-import { apiErrorThrower, responseErrorThrower, BaseError, ParamError, errorPopper } from '@/exceptions/error';
+import { apiErrorThrower, BaseError, ParamError, errorPopper, getBackendErrorFromResponse } from '@/exceptions/error';
 
 interface LoginCredentials {
   name: string;
@@ -9,26 +11,10 @@ interface LoginCredentials {
 }
 
 
-/**
- * Call API to log out an account.
- */
-export async function logout() {
-  let data = undefined;
-
-  try {
-    // get login info from server
-    let res = await axiosIns.get('/auth/logout');
-    data = res.data;
-
-    // if successfully logged out, revalidate me info API.
-    await mutate('/user/me');
-  } catch (e) {
-    // even if error caught, still need to revalidate me info API.
-    await mutate('/user/me');
-    apiErrorThrower(e);
-  }
-
-  return data;
+export async function signOut() {
+  await Session.signOut();
+  await mutate('/user/me');
+  return;
 }
 
 
@@ -46,21 +32,26 @@ export interface UserIn {
  *
  * Returns:
  *
- * If success, return `string` of current logged in account's role name. If not logged in, return `undefined`.
+ * If success, return `string` of current logged in account's role name. If not logged in, return `null`.
  */
-export async function getMe(): Promise<UserIn | undefined> {
-  let data = undefined;
+export async function getMe(): Promise<UserIn | null> {
+  let data = null;
 
   try {
     let res = await axiosIns.get('/user/me');
     data = res.data;
     return (data as UserIn);
   } catch (e) {
+    const backendError = getBackendErrorFromResponse((e as any).response);
+    if (backendError !== undefined && backendError.name === 'token_required') {
+      return null;
+    }
     apiErrorThrower(e);
+    return null;
   }
 }
 
 
 export function useGetMe() {
-  return useSWR('/user/me', getMe);
+  return useSWR('/user/me', getMe, { keepPreviousData: true });
 }
