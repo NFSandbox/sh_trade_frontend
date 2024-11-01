@@ -1,5 +1,5 @@
 import toast from 'react-hot-toast';
-import {message} from "antd";
+import { message } from "antd";
 
 export class BaseError extends Error {
   name: string;
@@ -20,6 +20,15 @@ export class NetworkError extends BaseError {
   constructor() {
     super('network_error', 'Network error occurred, ' +
       'please check your Internet connection or maybe there is error occurred at server side.');
+  }
+}
+
+export function responseErrorThrower(response: any) {
+  if (response?.data?.detail?.error == true) {
+    console.log('in res err thrower')
+    const name = response.data.detail.name ?? 'unknown_error';
+    const message = response.data.detail.message ?? 'Unknown error occurred.';
+    throw new BaseError(name, message);
   }
 }
 
