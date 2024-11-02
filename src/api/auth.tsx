@@ -4,6 +4,7 @@ import Session from "supertokens-web-js/recipe/session";
 
 import { axiosIns } from './axios';
 import { apiErrorThrower, BaseError, ParamError, errorPopper, getBackendErrorFromResponse } from '@/exceptions/error';
+import { useRouter } from "next/navigation";
 
 interface LoginCredentials {
   name: string;
@@ -54,4 +55,19 @@ export async function getMe(): Promise<UserIn | null> {
 
 export function useGetMe() {
   return useSWR('/user/me', getMe, { keepPreviousData: true });
+}
+
+
+/**
+ * Similar to getMe(), but force redirect to auth page if no valid user.
+ */
+export function useGetMeForce() {
+  const router = useRouter();
+  const { data } = useGetMe();
+
+  if (data === null) {
+    router.push('/auth');
+  }
+
+  return useGetMe();
 }

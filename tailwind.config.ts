@@ -16,11 +16,11 @@ const config: Config = {
           light: '#0eb6e9'
         },
         'secondary': '#7dd3fc',
-        'fgcolor': '#f8fafc',
+        'fgcolor': '#ffffff',
         'fgcolor-dark': '#1e293b',
         'bgcolor': '#e2e8f0',
         'bgcolor-dark': '#020617',
-        'white': '#f8fafc',
+        'white': '#ffffff',
         'red': '#dc2626',
         'red-light': '#f87171',
         'black': '#020617',

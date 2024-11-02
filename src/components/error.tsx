@@ -46,10 +46,18 @@ export function ErrorCard(props: ErrorCardProps) {
 
 export function LoadingSkeleton() {
   return (
-    <Center className={classNames(
-      'p-2',
+    <FlexDiv className={classNames(
+      'w-full max-w-[50rem] p-4',
     )}>
       <Skeleton active />
-    </Center>
+    </FlexDiv>
+  );
+}
+
+export function LoadingPage() {
+  return (
+    <FlexDiv className="flex-auto flex-col h-full w-full max-w-[50rem] justify-start items-start">
+      <LoadingSkeleton />
+    </FlexDiv>
   );
 }

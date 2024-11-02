@@ -9,16 +9,14 @@ import SuperTokens from 'supertokens-web-js';
 import Session from 'supertokens-web-js/recipe/session';
 import EmailPassword from 'supertokens-web-js/recipe/emailpassword'
 
-import { PiSignOut } from "react-icons/pi";
-import { AiOutlineInbox } from "react-icons/ai";
-
 // Components
 import { Header } from "@/components/header";
 import { Container, FlexDiv } from "@/components/container";
 import { Divider, Popover, Avatar, Button, ButtonProps } from 'antd';
 import { AiOutlineUser, AiOutlineNotification } from "react-icons/ai";
 import { IoMdNotificationsOutline } from "react-icons/io";
-
+import { PiSignOut } from "react-icons/pi";
+import { AiOutlineInbox } from "react-icons/ai";
 
 // Apis
 import { getMe, useGetMe } from '@/api/auth';
@@ -64,8 +62,10 @@ export function ResponsiveLayout({ children }: ResponsiveLayoutProps) {
 
   return (
     <>
-      {isHeaderVisible == true && <CusHeader></CusHeader>}
-      {children}
+      <FlexDiv className="w-full flex-none">{isHeaderVisible == true && <CusHeader></CusHeader>}</FlexDiv>
+      <FlexDiv expand className={classNames(
+        'flex-col overflow-y-auto',
+      )}>{children}</FlexDiv>
     </>
   );
 }

@@ -15,7 +15,7 @@ export function Title(
     <>
       <p className={classNames(
         'font-bold text-lg mt-2',
-        'md:text-xl md:mt-4',
+        'md:text-xl md:mt-4 opacity-90',
       )}>{children}</p>
     </>
   );

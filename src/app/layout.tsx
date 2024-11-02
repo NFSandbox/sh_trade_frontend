@@ -40,7 +40,6 @@ export default function RootLayout(
             <ResponsiveLayout>{children}</ResponsiveLayout>
           </AdaptiveBackground>
         </AntdRegistry>
-
       </body>
     </html>
   );
