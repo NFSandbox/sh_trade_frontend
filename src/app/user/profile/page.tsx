@@ -15,7 +15,13 @@ export const metadata: Metadata = {
   description: `${gene_config.appDesc}`
 }
 
-export default function Home() {
+interface HomeProps {
+  params: Promise<{ slug: string }>
+}
+
+export default async function Home(props: HomeProps) {
+  // const { slug } = await props.params;
+
   return (<Center>
     <clients.Client />
   </Center>);
