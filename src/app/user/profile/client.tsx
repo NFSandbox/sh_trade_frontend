@@ -9,6 +9,7 @@ import { Avatar, Typography } from 'antd';
 import { Title } from '@/components/title';
 const { Paragraph } = Typography;
 import { PageSegment } from '@/cus_components/pages';
+import { AiOutlineMail, AiOutlinePhone, AiOutlineQq, AiOutlineWechat, AiOutlineDelete } from "react-icons/ai";
 
 // States
 import { useLayoutState, useHeaderTitle } from '@/states/layoutState';
@@ -23,7 +24,7 @@ import toast from 'react-hot-toast';
 
 // Apis
 import { useGetMeForce } from '@/api/auth';
-import { updateUserDescription, useContactInfo } from '@/api/user';
+import { updateUserDescription, useContactInfo, ContactInfoIn } from '@/api/user';
 
 
 
@@ -105,12 +106,101 @@ function ContactInfoSegment() {
 
   let content = <LoadingSkeleton />;
   if (!isLoading)
-    content = (<pre>{JSON.stringify(contactInfo, undefined, ' ')}</pre>);
+    content = (
+      <div className='w-full grid grid-cols-12 gap-x-2'>
+        {(contactInfo?.map((contactInfoitem) => {
+          return <ContactInfoItem key={contactInfoitem.contact_type} contactInfo={contactInfoitem} />
+        }))}
+      </div>
+    );
 
   return (
     <PageSegment>
       <Title>联系方式</Title>
       {content}
     </PageSegment>
+  );
+}
+
+interface ContactInfoItemProps {
+  contactInfo: ContactInfoIn;
+}
+
+function ContactInfoItem(props: ContactInfoItemProps) {
+  const contactInfo = props.contactInfo;
+
+  async function handleClickCopy() {
+    try {
+      const clipboard = new window.Clipboard();
+      await clipboard.writeText(contactInfo.contact_info);
+      toast.success('联系方式已复制');
+    } catch (e) {
+      toast.error('联系方式复制失败');
+    }
+  }
+
+  return (
+    <button onClick={handleClickCopy} className='grid grid-cols-subgrid col-span-12'>
+      <div className='grid grid-cols-subgrid col-span-12  items-center rounded-lg hover:bg-bgcolor/50 dark:hover:bg-bgcolor-dark/50 py-4'>
+
+        {/* Contact Type */}
+        <div className='col-span-3 sm:col-span-2'>
+          <ContactTypeTag contactType={contactInfo.contact_type} />
+        </div>
+
+        {/* Contact Info */}
+        <p className='col-span-6 sm:col-span-8 text-start'>{contactInfo.contact_info}</p>
+
+        {/* Actions */}
+        <div className='col-span-3 sm:col-span-2'>
+          <Button type='default' onClick={(e) => { console.log(e); e.stopPropagation(); }}>
+            <AiOutlineDelete size={20} />
+          </Button>
+        </div>
+      </div>
+    </button>
+  );
+}
+
+interface ContactTypeTagProps {
+  contactType: string;
+}
+
+function ContactTypeTag(props: ContactTypeTagProps) {
+  interface ContactTypeDisplayInfo {
+    icon?: React.ReactNode;
+    name: string;
+  }
+
+  const typeResourceMap: Record<string, ContactTypeDisplayInfo> = {
+    'ahuemail': {
+      'icon': <AiOutlineMail size={20} />,
+      'name': 'AHU邮箱',
+    },
+    'email': {
+      'icon': <AiOutlineMail size={20} />,
+      'name': '邮箱',
+    },
+    'phone': {
+      'icon': <AiOutlinePhone size={20} />,
+      'name': '电话',
+    },
+    'qq': {
+      'icon': <AiOutlineQq size={20} />,
+      'name': 'QQ',
+    },
+    'wechat': {
+      'icon': <AiOutlineWechat size={20} />,
+      'name': '微信',
+    }
+  };
+
+  const contactTypeInfo = typeResourceMap[props.contactType] ?? undefined;
+
+  return (
+    <div className='flex flex-none flex-col items-center opacity-50'>
+      {contactTypeInfo.icon}
+      <p className='text-[12px]'>{contactTypeInfo.name}</p>
+    </div>
   );
 }

@@ -34,7 +34,7 @@ export async function updateUserDescription(description: string): Promise<unknow
   }
 }
 
-interface ContactInfoIn {
+export interface ContactInfoIn {
   contact_type: string;
   contact_info: string;
   contact_info_id: number;
