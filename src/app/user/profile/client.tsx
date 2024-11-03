@@ -1,31 +1,45 @@
-'use client';
-import { useEffect, useState, useLayoutEffect } from 'react';
+"use client";
+import { useEffect, useState, useLayoutEffect } from "react";
 
 // Components
-import { FlexDiv, Center } from '@/components/container';
-import { Button, Input } from 'antd';
-import { LoadingPage, LoadingSkeleton } from '@/components/error';
-import { Avatar, Typography } from 'antd';
-import { Title } from '@/components/title';
+import { FlexDiv, Center } from "@/components/container";
+import { LoadingPage, LoadingSkeleton } from "@/components/error";
+import { Avatar, Typography, Form, Button, Input, Select, Space } from "antd";
+const { useForm } = Form;
+import { Title } from "@/components/title";
 const { Paragraph } = Typography;
-import { PageSegment } from '@/cus_components/pages';
-import { ContactInfoItem } from '@/cus_components/contact_info';
-import { AiOutlineMail, AiOutlinePhone, AiOutlineQq, AiOutlineWechat, AiOutlineDelete } from "react-icons/ai";
+import { PageSegment } from "@/cus_components/pages";
+import { ContactInfoItem } from "@/cus_components/contact_info";
+import {
+  AiOutlineMail,
+  AiOutlinePhone,
+  AiOutlineQq,
+  AiOutlineWechat,
+  AiOutlineDelete,
+} from "react-icons/ai";
 
 // States
-import { useLayoutState, useHeaderTitle } from '@/states/layoutState';
-import { useSettingsState } from '@/states/settingsState';
-import { useStore } from '@/tools/use_store';
+import { useLayoutState, useHeaderTitle } from "@/states/layoutState";
+import { useSettingsState } from "@/states/settingsState";
+import { useStore } from "@/tools/use_store";
+import { useTriggerState } from "@/tools/use_trigger_state";
 
 // Tools
-import { classNames } from '@/tools/css_tools';
-import { asyncSleep } from '@/tools/general';
-import { errorPopper } from '@/exceptions/error';
-import toast from 'react-hot-toast';
+import { classNames } from "@/tools/css_tools";
+import { asyncSleep, useAsyncTaskWithLoadingState } from "@/tools/general";
+import { errorPopper } from "@/exceptions/error";
+import toast from "react-hot-toast";
 
 // Apis
-import { useGetMeForce } from '@/api/auth';
-import { updateUserDescription, useContactInfo, ContactInfoIn } from '@/api/user';
+import { useGetMeForce } from "@/api/auth";
+import {
+  updateUserDescription,
+  useContactInfo,
+  removeContactInfo,
+  addContactInfo,
+  ContactInfoIn,
+  ContactInfoOutNew,
+} from "@/api/user";
 
 interface ClientProps {
   userIdStr?: string;
@@ -43,16 +57,10 @@ export function Client(props: ClientProps) {
   //   ;
   // }
 
-
-  const {
-    data,
-    isLoading,
-  } = useGetMeForce();
+  const { data, isLoading } = useGetMeForce();
 
   return (
-    <FlexDiv
-      expand
-      className='flex-col items-center'>
+    <FlexDiv expand className="flex-col items-center">
       <UserData />
       <ContactInfoSegment />
     </FlexDiv>
@@ -60,10 +68,7 @@ export function Client(props: ClientProps) {
 }
 
 export function UserData() {
-  const {
-    data: userInfo,
-    isLoading,
-  } = useGetMeForce();
+  const { data: userInfo, isLoading } = useGetMeForce();
   const [isDescUpdating, setIsDescUpdating] = useState(false);
 
   async function handleDescriptionChange(newDesc: string) {
@@ -71,17 +76,15 @@ export function UserData() {
 
     try {
       const res = await toast.promise(updateUserDescription(newDesc), {
-        loading: '更新中...',
-        success: '更新成功',
-        error: '更新失败',
+        loading: "更新中...",
+        success: "更新成功",
+        error: "更新失败",
       });
-
     } catch (e) {
       errorPopper(e);
+    } finally {
+      setIsDescUpdating(false);
     }
-
-    finally { setIsDescUpdating(false); }
-
   }
 
   let content = <LoadingSkeleton />;
@@ -90,20 +93,27 @@ export function UserData() {
     content = (
       <>
         {/* Avatar, UserName ID Part */}
-        <FlexDiv className='flex-row gap-x-2 items-center'>
+        <FlexDiv className="flex-row gap-x-2 items-center">
           {/* Avatar */}
-          <Avatar size={60} gap={0}>{userInfo?.username.substring(0, 3)}</Avatar>
+          <Avatar size={60} gap={0}>
+            {userInfo?.username.substring(0, 3)}
+          </Avatar>
           {/* UserName ID */}
-          <FlexDiv className='flex-col gap-y-2'>
-            <h2 className='text-xl opacity-80'>{userInfo?.username}</h2>
-            <h2 className='text-md opacity-50'>用户编号: {userInfo?.user_id}</h2>
+          <FlexDiv className="flex-col gap-y-2">
+            <h2 className="text-xl opacity-80">{userInfo?.username}</h2>
+            <h2 className="text-md opacity-50">
+              用户编号: {userInfo?.user_id}
+            </h2>
           </FlexDiv>
         </FlexDiv>
 
         {/* Description */}
-        <Paragraph disabled={isDescUpdating} editable={{ onChange: handleDescriptionChange }}>{userInfo?.description ?? '暂无介绍信息。'}</Paragraph>
-
-
+        <Paragraph
+          disabled={isDescUpdating}
+          editable={{ onChange: handleDescriptionChange }}
+        >
+          {userInfo?.description ?? "暂无介绍信息。"}
+        </Paragraph>
       </>
     );
 
@@ -115,106 +125,126 @@ export function UserData() {
   );
 }
 
-
 function ContactInfoSegment() {
-  const { data: contactInfo, isLoading } = useContactInfo();
+  const { data: contactInfo, isLoading, isValidating } = useContactInfo();
+  const { isTriggered: isAddTriggered, triggerState: setAddTriggered } =
+    useTriggerState(false);
 
-  let content = <LoadingSkeleton />;
+  const useAddContactForm = useForm<ContactInfoOutNew>();
+
+  // Handle add contact
+  const { task: handleAddContactInfo, isLoading: isAddingContact } =
+    useAsyncTaskWithLoadingState(async function (info: ContactInfoOutNew) {
+      console.log(info);
+      await addContactInfo(info);
+    });
+
+  let contactInfoListElem = <LoadingSkeleton />;
   if (!isLoading)
-    content = (
-      <FlexDiv className='flex-col w-full'>
-        {(contactInfo?.map((contactInfoitem) => {
-          return <ContactInfoItem key={contactInfoitem.contact_type} contactInfo={contactInfoitem} onRemove={() => { }} />
-        }))}
+    contactInfoListElem = (
+      // List Of Contact Info
+      <FlexDiv
+        className={classNames(
+          "flex-col w-full flex-none",
+          isValidating ? "opacity-50" : ""
+        )}
+      >
+        {contactInfo?.map((contactInfoItem) => {
+          return (
+            <ContactInfoItem
+              key={contactInfoItem.contact_info_id}
+              contactInfo={contactInfoItem}
+              onRemove={removeContactInfo}
+            />
+          );
+        })}
       </FlexDiv>
     );
 
   return (
     <PageSegment>
       <Title>联系方式</Title>
-      {content}
+
+      {/* Contact Info List */}
+      {contactInfoListElem}
+
+      {/* Add Contact Info Part */}
+      <FlexDiv
+        className={classNames(
+          "w-full justify-end",
+          isAddTriggered ? "" : "hidden"
+        )}
+      >
+        <Form<ContactInfoOutNew>
+          // form={useAddContactForm}
+          layout="inline"
+          name="add_contact_info"
+          initialValues={{ contact_type: "qq" }}
+          onFinish={handleAddContactInfo}
+          // onFinishFailed={onFinishFailed}
+          autoComplete="off"
+          style={{}}
+        >
+          <Form.Item<ContactInfoOutNew> name="contact_type">
+            <Select
+              className="min-w-[6rem]"
+              options={[
+                { value: "qq", label: "QQ" },
+                { value: "wechat", label: "微信" },
+                { value: "email", label: "电子邮箱" },
+                { value: "phone", label: "电话" },
+                {
+                  value: "ahuemail",
+                  label: "AHU邮箱",
+                  disabled: true,
+                  title: "AHU邮箱目前不支持手动添加",
+                },
+              ]}
+            />
+          </Form.Item>
+
+          <Form.Item<ContactInfoOutNew>
+            className=""
+            label="联系方式"
+            name="contact_info"
+          >
+            <Input placeholder="请输入所选择类型的联系方式" />
+          </Form.Item>
+
+          <Form.Item>
+            <Button
+              type="primary"
+              htmlType="submit"
+              onClick={() => {}}
+              loading={isAddingContact}
+            >
+              确定
+            </Button>
+          </Form.Item>
+
+          <Form.Item>
+            <Button
+              onClick={() => {
+                setAddTriggered();
+              }}
+            >
+              取消
+            </Button>
+          </Form.Item>
+        </Form>
+      </FlexDiv>
+
+      <FlexDiv
+        className={classNames("place-self-end pr-4", isAddTriggered ? "hidden" : "")}
+      >
+        <Button
+          onClick={() => {
+            setAddTriggered();
+          }}
+        >
+          添加新的联系方式
+        </Button>
+      </FlexDiv>
     </PageSegment>
   );
 }
-
-// interface ContactInfoItemProps {
-//   contactInfo: ContactInfoIn;
-// }
-
-// function ContactInfoItem(props: ContactInfoItemProps) {
-//   const contactInfo = props.contactInfo;
-
-//   async function handleClickCopy() {
-//     try {
-//       const clipboard = new window.Clipboard();
-//       await clipboard.writeText(contactInfo.contact_info);
-//       toast.success('联系方式已复制');
-//     } catch (e) {
-//       toast.error('联系方式复制失败');
-//     }
-//   }
-
-//   return (
-//     <button onClick={handleClickCopy} className='w-full'>
-//       <div className='grid grid-cols-12 items-center rounded-lg hover:bg-bgcolor/50 dark:hover:bg-bgcolor-dark/50 py-2'>
-//         {/* Contact Type */}
-//         <div className='col-span-3 sm:col-span-2'>
-//           <ContactTypeTag contactType={contactInfo.contact_type} />
-//         </div>
-
-//         {/* Contact Info */}
-//         <p className='col-span-6 sm:col-span-8 text-start'>{contactInfo.contact_info}</p>
-
-//         {/* Actions */}
-//         <div className='col-span-3 sm:col-span-2'>
-//           <Button type='default' onClick={(e) => { console.log(e); e.stopPropagation(); }}>
-//             <AiOutlineDelete size={20} />
-//           </Button>
-//         </div>
-//       </div>
-//     </button>
-//   );
-// }
-
-// interface ContactTypeTagProps {
-//   contactType: string;
-// }
-
-// function ContactTypeTag(props: ContactTypeTagProps) {
-//   interface ContactTypeDisplayInfo {
-//     icon?: React.ReactNode;
-//     name: string;
-//   }
-
-//   const typeResourceMap: Record<string, ContactTypeDisplayInfo> = {
-//     'ahuemail': {
-//       'icon': <AiOutlineMail size={20} />,
-//       'name': 'AHU邮箱',
-//     },
-//     'email': {
-//       'icon': <AiOutlineMail size={20} />,
-//       'name': '邮箱',
-//     },
-//     'phone': {
-//       'icon': <AiOutlinePhone size={20} />,
-//       'name': '电话',
-//     },
-//     'qq': {
-//       'icon': <AiOutlineQq size={20} />,
-//       'name': 'QQ',
-//     },
-//     'wechat': {
-//       'icon': <AiOutlineWechat size={20} />,
-//       'name': '微信',
-//     }
-//   };
-
-//   const contactTypeInfo = typeResourceMap[props.contactType] ?? undefined;
-
-//   return (
-//     <div className='flex flex-none flex-col items-center opacity-50'>
-//       {contactTypeInfo.icon}
-//       <p className='text-[12px]'>{contactTypeInfo.name}</p>
-//     </div>
-//   );
-// }
