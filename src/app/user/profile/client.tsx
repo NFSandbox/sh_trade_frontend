@@ -28,6 +28,7 @@ import { useTriggerState } from "@/tools/use_trigger_state";
 import { classNames } from "@/tools/css_tools";
 import { asyncSleep, useAsyncTaskWithLoadingState } from "@/tools/general";
 import { errorPopper } from "@/exceptions/error";
+import { useMinBreakPoint } from "@/tools/use_breakpoints";
 import toast from "react-hot-toast";
 
 // Apis
@@ -60,7 +61,7 @@ export function Client(props: ClientProps) {
   const { data, isLoading } = useGetMeForce();
 
   return (
-    <FlexDiv expand className="flex-col items-center">
+    <FlexDiv className="flex-col w-full justify-start items-start">
       <UserData />
       <ContactInfoSegment />
     </FlexDiv>
@@ -93,7 +94,7 @@ export function UserData() {
     content = (
       <>
         {/* Avatar, UserName ID Part */}
-        <FlexDiv className="flex-row gap-x-2 items-center">
+        <FlexDiv className="flex-none flex-row gap-x-2 items-center">
           {/* Avatar */}
           <Avatar size={60} gap={0}>
             {userInfo?.username.substring(0, 3)}
@@ -126,6 +127,8 @@ export function UserData() {
 }
 
 function ContactInfoSegment() {
+  // media breakpoint
+  const idMd = useMinBreakPoint("md");
   const { data: contactInfo, isLoading, isValidating } = useContactInfo();
   const { isTriggered: isAddTriggered, triggerState: setAddTriggered } =
     useTriggerState(false);
@@ -176,7 +179,6 @@ function ContactInfoSegment() {
         )}
       >
         <Form<ContactInfoOutNew>
-          // form={useAddContactForm}
           layout="inline"
           name="add_contact_info"
           initialValues={{ contact_type: "qq" }}
@@ -235,7 +237,10 @@ function ContactInfoSegment() {
       </FlexDiv>
 
       <FlexDiv
-        className={classNames("place-self-end pr-4", isAddTriggered ? "hidden" : "")}
+        className={classNames(
+          "place-self-end pr-4",
+          isAddTriggered ? "hidden" : ""
+        )}
       >
         <Button
           onClick={() => {

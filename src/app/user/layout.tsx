@@ -1,24 +1,23 @@
-'use client';
+"use client";
 
-import { Children, useEffect, useState, useLayoutEffect } from 'react';
-import { useRouter } from 'next/navigation';
+import { Children, useEffect, useState, useLayoutEffect } from "react";
+import { useRouter } from "next/navigation";
 
 // Components
-import { FlexDiv, Center } from '@/components/container';
-import { Button, Input, MenuProps, Menu } from 'antd';
+import { FlexDiv, Center } from "@/components/container";
+import { Button, Input, MenuProps, Menu } from "antd";
 import { IoIosContact } from "react-icons/io";
-import { AiOutlineContacts } from "react-icons/ai";
+import { AiOutlineContacts, AiOutlineInbox } from "react-icons/ai";
 import { PiSignOut } from "react-icons/pi";
-import { ErrorBoundary } from 'react-error-boundary';
+import { ErrorBoundary } from "react-error-boundary";
 
 // States
-import { useLayoutState, useHeaderTitle } from '@/states/layoutState';
+import { useLayoutState, useHeaderTitle } from "@/states/layoutState";
 
 // Apis
-import { useGetMeForce } from '@/api/auth';
+import { useGetMeForce } from "@/api/auth";
 
-
-const userBasePath = '/user';
+const userBasePath = "/user";
 
 interface UserProfileLayOutProps {
   children: React.ReactNode;
@@ -28,69 +27,73 @@ interface UserProfileLayOutProps {
  * Basic layout structure
  */
 export default function UserProfileLayOut(props: UserProfileLayOutProps) {
-  useHeaderTitle('用户中心');
+  useHeaderTitle("用户中心");
   useGetMeForce();
 
   const router = useRouter();
 
   function handleMenuSelectedChange(e: unknown) {
-    console.log(e);
-    if (typeof (e as any).key === 'string') {
+    if (typeof (e as any).key === "string") {
       const keyString: string = (e as any).key;
 
       // key starts with href:
-      if (keyString.startsWith('href:')) {
+      if (keyString.startsWith("href:")) {
         const linkStr = keyString.substring(5);
 
         // absolute
-        if (linkStr.startsWith('/')) {
+        if (linkStr.startsWith("/")) {
           router.push(linkStr);
         }
 
         // relative
         else {
-          router.push(userBasePath + '/' + linkStr);
+          router.push(userBasePath + "/" + linkStr);
         }
       }
     }
   }
 
   return (
-    <FlexDiv className='flex-row w-full h-full'>
+    <FlexDiv
+      expand
+      className="flex-row justify-center bg-fgcolor dark:bg-fgcolor-dark"
+    >
       {/* Left Nav Bar */}
-      <FlexDiv className='flex-none'>
+      <FlexDiv className="flex-none m-4 rounded-xl overflow-hidden">
         <Menu
-          mode="inline"
-          defaultSelectedKeys={['profile']}
+          mode='inline'
+          defaultSelectedKeys={["profile"]}
           // openKeys={stateOpenKeys}
           onSelect={handleMenuSelectedChange}
-          style={{ width: 200, minWidth: 150, }}
+          style={{ width: 200, minWidth: 150 }}
           items={items}
         />
       </FlexDiv>
       {/* Children takes all rest space*/}
-      <FlexDiv className='w-full h-full overflow-y-auto bg-fgcolor dark:bg-fgcolor-dark'>{props.children}</FlexDiv>
+      <FlexDiv className="h-full w-full max-w-[50rem] flex-col justify-center items-center overflow-y-auto profile-layout-children-root">
+        {props.children}
+      </FlexDiv>
     </FlexDiv>
   );
 }
 
-type MenuItem = Required<MenuProps>['items'][number] & { href?: string };
+type MenuItem = Required<MenuProps>["items"][number] & { href?: string };
 
 const items: MenuItem[] = [
   {
-    key: 'href:profile',
+    key: "href:profile",
     icon: <IoIosContact size={20} />,
-    label: '用户资料',
+    label: "用户资料",
   },
   {
-    key: 'href:contact_info',
-    icon: <AiOutlineContacts size={20} />,
-    label: '联系方式',
+    key: "href:published",
+    icon: <AiOutlineInbox size={20} />,
+    label: "已发布",
   },
   {
     danger: true,
-    key: 'href:/signout',
+    key: "href:/auth/signout",
     icon: <PiSignOut size={20} />,
-    label: '退出登录',
+    label: "退出登录",
   },
 ];

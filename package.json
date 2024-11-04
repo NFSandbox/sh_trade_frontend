@@ -23,6 +23,7 @@
     "supertokens-auth-react": "^0.48.0",
     "supertokens-web-js": "^0.14.0",
     "swr": "^2.2.5",
+    "use-breakpoint": "^4.0.1",
     "zustand": "^5.0.1"
   },
   "devDependencies": {

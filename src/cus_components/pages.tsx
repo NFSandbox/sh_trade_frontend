@@ -24,7 +24,7 @@ export function PageSegment(props: PageSegmentProps) {
   return (
     <FlexDiv
       className={classNames(
-        'flex-col p-4 justify-start items-start w-full max-w-[50rem] gap-y-4',
+        'flex-none flex-col p-4 justify-start items-start w-full max-w-[50rem] gap-y-4',
         props.className ?? '',
       )}>
       {props.title && <Title>{props.title}</Title>}

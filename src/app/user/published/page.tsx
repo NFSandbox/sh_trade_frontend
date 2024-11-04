@@ -10,16 +10,14 @@ import { Center } from "@/components/container";
 import * as clients from "./client";
 
 export const metadata: Metadata = {
-  title: `用户中心 - ${gene_config.appName}`,
+  title: `发布的物品 - ${gene_config.appName}`,
   description: `${gene_config.appDesc}`,
 };
 
-interface HomeProps {
-  params: Promise<{ slug: string }>;
-}
-
-export default async function Home(props: HomeProps) {
-  // const { slug } = await props.params;
-
-  return <clients.Client />;
+export default function Home() {
+  return (
+    <Center>
+      <clients.Client />
+    </Center>
+  );
 }
