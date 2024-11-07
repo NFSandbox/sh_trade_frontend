@@ -1,12 +1,11 @@
-'use client';
+"use client";
 
 // Fundamentals
 import React, { AriaRole, CSSProperties } from "react";
 
 // Tools
 import { classNames } from "@/tools/css_tools";
-import { setDefault } from '@/tools/set_default';
-
+import { setDefault } from "@/tools/set_default";
 
 interface ContainerProps {
   children: React.ReactNode;
@@ -34,24 +33,23 @@ interface ContainerProps {
  * - Do NOT try to pass padding style in classNames param, instead, using a
  * margin at the element that directly inside this Container
  */
-export function Container(
-  {
-    children,
-    className,
-    hasColor,
-    hasShadow,
-    hasHoverColor,
-    hasHoverColorTrans,
-    rounded,
-    expand,
-    center,
-    style,
-    selected,
-    id,
-  }: ContainerProps) {
+export function Container({
+  children,
+  className,
+  hasColor,
+  hasShadow,
+  hasHoverColor,
+  hasHoverColorTrans,
+  rounded,
+  expand,
+  center,
+  style,
+  selected,
+  id,
+}: ContainerProps) {
   // Classname default to empty string
   if (className === undefined) {
-    className = '';
+    className = "";
   }
   // hasColor default to true
   if (hasColor === undefined) {
@@ -93,25 +91,29 @@ export function Container(
       <div
         id={id}
         className={classNames(
-          'flex min-w-0 min-h-0 overflow-hidden',
-          hasColor ? 'bg-fgcolor dark:bg-fgcolor-dark' : '',
-          selected ? 'bg-primary text-white' : '',
-          hasShadow ? 'shadow-lg' : '',
-          rounded ? 'rounded-lg' : '',
-          expand ? 'h-full w-full' : '',
-          className,
+          "flex min-w-0 min-h-0 overflow-hidden",
+          hasColor ? "bg-fgcolor dark:bg-fgcolor-dark" : "",
+          selected ? "bg-primary text-white" : "",
+          hasShadow ? "shadow-lg" : "",
+          rounded ? "rounded-lg" : "",
+          expand ? "h-full w-full" : "",
+          className
         )}
-        style={style as CSSProperties}>
-        <div className={classNames(
-          'flex flex-auto h-full w-full min-w-0 min-h-0',
-          hasHoverColor ? 'hover:bg-black/5 dark:hover:bg-white/5' : '',
-          hasHoverColorTrans ? 'transition-colors' : '',
-          center ? 'justify-center content-center' : '',
-        )}>
+        style={style as CSSProperties}
+      >
+        <div
+          className={classNames(
+            "flex flex-auto h-full w-full min-w-0 min-h-0",
+            hasHoverColor ? "hover:bg-black/5 dark:hover:bg-white/5" : "",
+            hasHoverColorTrans ? "transition-colors" : "",
+            center ? "justify-center content-center" : ""
+          )}
+        >
           {children}
         </div>
       </div>
-    </>);
+    </>
+  );
 }
 
 export interface FlexDivProps {
@@ -174,8 +176,7 @@ export interface FlexDivProps {
   onHoverStateChange?: (isHovered: boolean) => any;
 }
 
-export function FlexDiv(
-  props: FlexDivProps,) {
+export function FlexDiv(props: FlexDivProps) {
   let {
     children,
     id,
@@ -195,13 +196,12 @@ export function FlexDiv(
   } = props;
 
   // set default
-  className = setDefault(className, '');
+  className = setDefault(className, "");
   expand = setDefault(expand, false);
   clearMinLimit = setDefault(clearMinLimit, true);
   vertical = setDefault(vertical, false);
   hasPadding = setDefault(hasPadding, false);
-  onHoverStateChange = setDefault(onHoverStateChange, function () {
-  });
+  onHoverStateChange = setDefault(onHoverStateChange, function () {});
   displayAsBlock = setDefault(displayAsBlock, false);
   textEllipsis = setDefault(textEllipsis, false);
   center = setDefault(center, false);
@@ -217,27 +217,31 @@ export function FlexDiv(
         role={roleName}
         hidden={hidden}
         onMouseEnter={function () {
-          onHoverStateChange!(true)
+          onHoverStateChange!(true);
         }}
         onMouseLeave={function () {
-          onHoverStateChange!(false)
+          onHoverStateChange!(false);
         }}
         className={classNames(
-          displayAsBlock ? 'block' : 'flex',
-          textEllipsis ? 'overflow-hidden overflow-ellipsis whitespace-nowrap' : '',
-          clearMinLimit ? 'min-h-0 min-w-0' : '',
-          expand ? 'h-full w-full' : '',
-          vertical ? 'flex-col' : '',
-          hasPadding ? 'px-2 py-2' : '',
-          center ? 'justify-center items-center' : '',
-          className,
+          displayAsBlock ? "block" : "flex",
+          textEllipsis
+            ? "overflow-hidden overflow-ellipsis whitespace-nowrap"
+            : "",
+          clearMinLimit ? "min-h-0 min-w-0" : "",
+          expand ? "h-full w-full" : "",
+          vertical ? "flex-col" : "",
+          hasPadding ? "px-2 py-2" : "",
+          center ? "justify-center items-center" : "",
+          className
         )}
         id={id}
         style={style}
-        {...others}>
+        {...others}
+      >
         {children}
       </div>
-    </>);
+    </>
+  );
 }
 
 /**
@@ -246,16 +250,26 @@ export function FlexDiv(
  * Notice:
  * - This component is expansive
  */
-export function Center({ children, className }: { children: React.ReactNode, className?: string }) {
+export function Center({
+  children,
+  className,
+  ...props
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
     <FlexDiv
       expand={true}
       className={classNames(
-        'flex-row justify-center items-center',
-        className ?? '',
-      )}>
+        "flex-row justify-center items-center",
+        className ?? ""
+      )}
+      {...props}
+    >
       {children}
-    </FlexDiv>);
+    </FlexDiv>
+  );
 }
 
 interface DividerProps {
@@ -266,9 +280,5 @@ interface DividerProps {
  * Horizonal divider component
  */
 export function Divider({ className }: DividerProps) {
-  return (<hr className={classNames(
-    'opacity-10',
-    className ?? '',
-  )}></hr>);
+  return <hr className={classNames("opacity-10", className ?? "")}></hr>;
 }
-

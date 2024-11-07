@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState, useLayoutEffect } from "react";
+import { useEffect, useState, useLayoutEffect, CSSProperties } from "react";
 
 // Components
 import { FlexDiv, Center } from "@/components/container";
@@ -41,7 +41,14 @@ import {
   ContactInfoIn,
   ContactInfoOutNew,
 } from "@/api/user";
+import { useUserItems } from "@/api/item";
 
 export function Client() {
-  return <Center>Developing...</Center>;
+  const { data: userItems } = useUserItems();
+
+  return (
+    <FlexDiv>
+      <pre>{JSON.stringify(userItems ?? "No Items Data", undefined, " ")}</pre>
+    </FlexDiv>
+  );
 }

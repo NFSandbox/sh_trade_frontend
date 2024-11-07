@@ -36,7 +36,6 @@ export async function updateUserDescription(
     return data;
   } catch (e) {
     apiErrorThrower(e);
-    return null;
   }
 }
 
@@ -96,7 +95,6 @@ export async function addContactInfo(
     return data;
   } catch (e) {
     apiErrorThrower(e);
-    return null;
   }
 }
 
@@ -120,6 +118,5 @@ export async function removeContactInfo(
     return data;
   } catch (e) {
     apiErrorThrower(e);
-    return null;
   }
 }
