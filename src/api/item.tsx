@@ -15,6 +15,9 @@ import { useRouter } from "next/navigation";
 // Tools
 import { asyncSleep } from "@/tools/general";
 
+// General
+import * as gene from "./general";
+
 export interface ItemIn {
   item_id: number;
   user_id: number;
@@ -38,17 +41,24 @@ export interface ItemIn {
 export async function getUserItems(
   user_id?: number,
   ignore_sold: boolean = false,
-  time_desc: boolean = true
-): Promise<ItemIn[]> {
+  time_desc: boolean = true,
+  pagination?: gene.PaginationConfig
+) {
   try {
-    const res = await axiosIns.get("/item", {
-      params: {
-        user_id,
-        ignore_sold,
-        time_desc,
+    const res = await axiosIns.post(
+      "/item",
+      {
+        pagination,
       },
-    });
-    return res.data as ItemIn[];
+      {
+        params: {
+          user_id,
+          ignore_sold,
+          time_desc,
+        },
+      }
+    );
+    return res.data as gene.PaginatedResult<ItemIn>;
   } catch (e) {
     apiErrorThrower(e);
   }
