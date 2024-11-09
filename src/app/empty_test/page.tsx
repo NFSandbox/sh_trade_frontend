@@ -1,19 +1,10 @@
 import { Skeleton } from "antd";
 import { FlexDiv, Center } from "@/components/container";
+import { LoadingPage } from "@/components/error";
 
 import { classNames } from "@/tools/css_tools";
 
 export default function Loading() {
   // You can add any UI inside Loading, including a Skeleton.
-  return (
-    <FlexDiv
-      expand
-      className={classNames("flex-col justify-start items-center", "p-4")}
-    >
-      <FlexDiv className="flex-col items-center justify-center w-full max-w-[50rem] gap-4">
-        <Skeleton active />
-        <Skeleton active />
-      </FlexDiv>
-    </FlexDiv>
-  );
+  return <LoadingPage></LoadingPage>;
 }

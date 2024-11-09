@@ -4,12 +4,14 @@ import { useEffect, useState, useLayoutEffect, CSSProperties } from "react";
 // Components
 import { FlexDiv, Center } from "@/components/container";
 import { LoadingPage, LoadingSkeleton } from "@/components/error";
-import { Avatar, Typography, Form, Button, Input, Select, Space } from "antd";
-const { useForm } = Form;
 import { Title } from "@/components/title";
-const { Paragraph } = Typography;
 import { PageSegment } from "@/cus_components/pages";
 import { ContactInfoItem } from "@/cus_components/contact_info";
+import { ItemCard } from "@/cus_components/item";
+
+import { Avatar, Typography, Form, Button, Input, Select, Space } from "antd";
+const { useForm } = Form;
+const { Paragraph } = Typography;
 import {
   AiOutlineMail,
   AiOutlinePhone,
@@ -44,11 +46,33 @@ import {
 import { useUserItems } from "@/api/item";
 
 export function Client() {
-  const { data: userItems } = useUserItems();
+  const { data: userItems, isLoading } = useUserItems();
+
+  const [clickable, setClickable] = useState(false);
+
+  if (isLoading) {
+    return <LoadingPage></LoadingPage>;
+  }
 
   return (
-    <FlexDiv>
-      <pre>{JSON.stringify(userItems ?? "No Items Data", undefined, " ")}</pre>
+    <FlexDiv className="flex-row gap-4 justify-start items-start">
+      <Button
+        onClick={() => {
+          setClickable(!clickable);
+        }}
+      >
+        Clickable: {JSON.stringify(clickable)}
+      </Button>
+      {userItems?.data.map(function (itemInfo) {
+        return (
+          <ItemCard
+            key={itemInfo.item_id}
+            itemInfo={itemInfo}
+            fixedWidth={false}
+            clickable={clickable}
+          ></ItemCard>
+        );
+      })}
     </FlexDiv>
   );
 }

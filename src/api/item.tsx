@@ -21,7 +21,7 @@ import * as gene from "./general";
 export interface ItemIn {
   item_id: number;
   user_id: number;
-  title: string;
+  name: string;
   description: string;
   price: number;
   created_time: number;
