@@ -7,7 +7,7 @@ import { LoadingPage, LoadingSkeleton } from "@/components/error";
 import { Title } from "@/components/title";
 import { PageSegment } from "@/cus_components/pages";
 import { ContactInfoItem } from "@/cus_components/contact_info";
-import { ItemCard } from "@/cus_components/item";
+import { ItemCard, AdaptiveItemGrid } from "@/cus_components/item";
 
 import { Avatar, Typography, Form, Button, Input, Select, Space } from "antd";
 const { useForm } = Form;
@@ -55,7 +55,7 @@ export function Client() {
   }
 
   return (
-    <FlexDiv className="flex-row gap-4 justify-start items-start">
+    <FlexDiv className="flex-col w-full gap-4 justify-start items-center pr-2">
       <Button
         onClick={() => {
           setClickable(!clickable);
@@ -63,16 +63,7 @@ export function Client() {
       >
         Clickable: {JSON.stringify(clickable)}
       </Button>
-      {userItems?.data.map(function (itemInfo) {
-        return (
-          <ItemCard
-            key={itemInfo.item_id}
-            itemInfo={itemInfo}
-            fixedWidth={false}
-            clickable={clickable}
-          ></ItemCard>
-        );
-      })}
+      <AdaptiveItemGrid itemInfoList={userItems?.data ?? []}></AdaptiveItemGrid>
     </FlexDiv>
   );
 }

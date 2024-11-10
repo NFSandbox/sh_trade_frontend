@@ -1,6 +1,6 @@
 "use client";
 
-import React, { ReactNode } from "react";
+import React, { CSSProperties, ReactNode } from "react";
 import Link from "next/link";
 
 // Supertokens
@@ -60,15 +60,15 @@ interface ItemCardProps {
  * A React component that shows an Item info
  */
 export function ItemCard(props: ItemCardProps) {
-  const fixedWidthTw = "w-[15rem] flex-none";
-  const dynamicWidthTw = "w-full flex-auto";
+  const fixedWidthTw = "flex-none w-[15rem]";
+  const dynamicWidthTw = "flex-auto w-full";
 
   let { itemInfo, fixedWidth, clickable } = props;
   fixedWidth = setDefault(fixedWidth, true);
   clickable = setDefault(clickable, true);
 
   // Final width tailwind to use
-  const widthTw = fixedWidth ? fixedWidthTw : dynamicWidthTw;
+  const widthTw = fixedWidth === true ? fixedWidthTw : dynamicWidthTw;
 
   // dayjs object to display
   const pubTimeDayJs = (dayjs as any)(itemInfo.created_time);
@@ -78,6 +78,7 @@ export function ItemCard(props: ItemCardProps) {
   let content = (
     <FlexDiv
       className={classNames(
+        "mark-item-flex-box",
         widthTw,
         // Spacing
         "flex-col justify-start items-start text-start",
@@ -103,9 +104,11 @@ export function ItemCard(props: ItemCardProps) {
         <FlexDiv className="flex-row flex-none justify-between items-center">
           {/* Price  */}
           <FlexDiv className="flex-none flex-row justify-start items-baseline">
+            {/* Price Symbol  */}
             <FlexDiv className="flex-none w-4 items-center justify-center">
               <p className="opacity-50 text-sm">$</p>
             </FlexDiv>
+            {/* Price Number  */}
             <span className="text-xl text-primary dark:text-primary-light">
               {itemInfo.price.toFixed(2)}
             </span>
@@ -121,9 +124,12 @@ export function ItemCard(props: ItemCardProps) {
 
         {/* Published Time  */}
         <FlexDiv className="flex-row flex-none items-center opacity-50">
+          {/* Clock Icon  */}
           <FlexDiv className="flex-none w-4 justify-center">
             <AiOutlineClockCircle className="inline"></AiOutlineClockCircle>
           </FlexDiv>
+
+          {/* Days Count  */}
           <p>
             {pubTimeStr} ({pubTimeToNowDiffDays} 天前)
           </p>
@@ -138,6 +144,53 @@ export function ItemCard(props: ItemCardProps) {
   }
 
   return content;
+}
+
+interface AdaptiveItemGridProps {
+  itemInfoList: ItemIn[];
+}
+
+/**
+ * Components that shows items, which controls the columns count automatically
+ * based on the screen size.
+ *
+ * The auto column number control part use CSS grid auto-
+ */
+export function AdaptiveItemGrid(props: AdaptiveItemGridProps) {
+  const autoItemGridCss: CSSProperties = {
+    width: "100%",
+    alignItems: "start",
+    justifyItems: "center",
+    display: "grid",
+    gap: "1rem",
+    justifyContent: "center",
+    gridTemplateColumns: "repeat(auto-fit, 15rem)",
+  };
+
+  const { itemInfoList } = props;
+
+  return (
+    <FlexDiv className="w-full flex-col items-center justify-start">
+      <FlexDiv
+        style={autoItemGridCss}
+        className={
+          classNames()
+          // "flex-row flex-wrap items-start justify-start",
+          // "gap-4"
+        }
+      >
+        {itemInfoList.map(function (itemInfo) {
+          return (
+            <ItemCard
+              key={itemInfo.item_id}
+              itemInfo={itemInfo}
+              clickable={true}
+            ></ItemCard>
+          );
+        })}
+      </FlexDiv>
+    </FlexDiv>
+  );
 }
 
 interface ItemCardPictureProps {
