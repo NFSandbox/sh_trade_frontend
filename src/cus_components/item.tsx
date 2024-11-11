@@ -140,7 +140,18 @@ export function ItemCard(props: ItemCardProps) {
 
   // Add button wrapper if clickable
   if (clickable) {
-    content = <button className={widthTw}>{content}</button>;
+    // determine url str to item page. do nothing if item-id undefined
+    let itemPageLinkStr = "#";
+    if (itemInfo.item_id !== undefined) {
+      itemPageLinkStr = `/item?item_id=${itemInfo.item_id}`;
+    }
+
+    // wrap by link
+    content = (
+      <Link href={itemPageLinkStr} className={widthTw}>
+        {content}
+      </Link>
+    );
   }
 
   return content;
