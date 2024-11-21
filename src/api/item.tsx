@@ -15,8 +15,9 @@ import { useRouter } from "next/navigation";
 // Tools
 import { asyncSleep } from "@/tools/general";
 
-// General
+// Other API Components
 import * as gene from "./general";
+import { UserIn } from "./auth";
 
 export interface ItemIn {
   item_id: number;
@@ -28,6 +29,11 @@ export interface ItemIn {
   sold: boolean;
   hidden: boolean;
   // Define other properties based on the item structure returned by the API
+}
+
+export interface ItemDetailedIn extends ItemIn {
+  user: UserIn;
+  fav_count: number;
 }
 
 /**
@@ -73,5 +79,31 @@ export function useUserItems(
     ["/item", user_id, ignore_sold, time_desc],
     () => getUserItems(user_id, ignore_sold, time_desc),
     { keepPreviousData: true }
+  );
+}
+
+export async function getItemDetailedInfo(item_id: string) {
+  try {
+    const res = await axiosIns.get("/item/detailed", {
+      params: {
+        item_id,
+      },
+    });
+    return res.data as ItemDetailedIn;
+  } catch (e) {
+    apiErrorThrower(e);
+  }
+}
+
+/**
+ * SWR hook for getItemDetailedInfo
+ */
+export function useItemDetailedInfo(item_id: string) {
+  return useSWR(
+    ["/item/detailed", item_id],
+    () => getItemDetailedInfo(item_id as string), // Fetcher function
+    {
+      keepPreviousData: true,
+    }
   );
 }

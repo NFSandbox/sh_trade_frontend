@@ -89,6 +89,12 @@ export function apiErrorThrower(e: any): never {
   );
 }
 
+/**
+ * A general popper used to pop any error in this system to user.
+ * 
+ * This popper use react-hot-toast, and also rely on the text 
+ * returned by errorStringifier()
+ */
 export function errorPopper(e: any) {
   toast.error(errorStringifier(e));
 }
