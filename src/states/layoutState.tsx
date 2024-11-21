@@ -1,14 +1,13 @@
-'use client';
+"use client";
 
-
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
-import { immer } from 'zustand/middleware/immer';
-import { useStore } from './useStore';
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { immer } from "zustand/middleware/immer";
+import { useStore } from "./useStore";
 
 // Configs
-import * as gene_config from '@/config/general';
-import { useEffect } from 'react';
+import * as gene_config from "@/config/general";
+import { useEffect } from "react";
 
 export interface LayoutStates {
   showHeader: boolean;
@@ -32,38 +31,36 @@ export interface LayoutActions {
 }
 
 export const useLayoutState = create<LayoutStates & LayoutActions>()(
-  immer(
-    (set, get) => ({
-      showHeader: true,
-      title: undefined,
-      displayTitle: `${gene_config.appName}`,
+  immer((set, get) => ({
+    showHeader: true,
+    title: undefined,
+    displayTitle: `${gene_config.appName}`,
 
-      setTitle(title) {
-        set((state) => {
-          state.title = title;
-        });
-        set((state) => {
-          state.displayTitle = get().getHeaderDispalyTitle();
-        })
-      },
+    setTitle(title) {
+      set((state) => {
+        state.title = title;
+      });
+      set((state) => {
+        state.displayTitle = get().getHeaderDispalyTitle();
+      });
+    },
 
-      setShowHeader(showHeader) {
-        set((state) => {
-          state.showHeader = showHeader;
-        })
-      },
+    setShowHeader(showHeader) {
+      set((state) => {
+        state.showHeader = showHeader;
+      });
+    },
 
-      getHeaderDispalyTitle() {
-        let str = gene_config.appName;
-        const title = get().title;
-        if (title !== undefined) {
-          str = title + ' - ' + str;
-        }
+    getHeaderDispalyTitle() {
+      let str = gene_config.appName;
+      const title = get().title;
+      if (title !== undefined) {
+        str = title + " - " + str;
+      }
 
-        return str;
-      },
-    }
-    ))
+      return str;
+    },
+  })),
 );
 
 /**

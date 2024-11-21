@@ -23,7 +23,7 @@ axiosIns.interceptors.response.use(
     }
     if (gene_config.apiRequestSimulatedDelay > 0) {
       toast(
-        `[DEBUG] Simulated API Request Delay On... Delay: ${gene_config.apiRequestSimulatedDelay}`
+        `[DEBUG] Simulated API Request Delay On... Delay: ${gene_config.apiRequestSimulatedDelay}`,
       );
     }
     await asyncSleep(gene_config.apiRequestSimulatedDelay);
@@ -33,5 +33,5 @@ axiosIns.interceptors.response.use(
     // Any status codes that falls outside the range of 2xx cause this function to trigger
     // Do something with response error
     return Promise.reject(error);
-  }
+  },
 );

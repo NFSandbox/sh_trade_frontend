@@ -1,4 +1,4 @@
-import {classNames} from '@/tools/css_tools';
+import { classNames } from "@/tools/css_tools";
 
 interface TitleProps {
   children: React.ReactNode;
@@ -7,16 +7,17 @@ interface TitleProps {
 /**
  * Components used to show a info title on page.
  */
-export function Title(
-  {
-    children
-  }: TitleProps) {
+export function Title({ children }: TitleProps) {
   return (
     <>
-      <p className={classNames(
-        'font-bold text-lg mt-2',
-        'md:text-xl md:mt-4 opacity-90',
-      )}>{children}</p>
+      <p
+        className={classNames(
+          "font-bold text-lg mt-2",
+          "md:text-xl md:mt-4 opacity-90",
+        )}
+      >
+        {children}
+      </p>
     </>
   );
 }

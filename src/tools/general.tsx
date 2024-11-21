@@ -47,7 +47,7 @@ export function inBrowserEnv(): boolean {
 export function promiseToastWithBaseErrorHandling<T>(
   promise: Promise<T>,
   loading: Renderable,
-  success: ValueOrFunction<Renderable, T>
+  success: ValueOrFunction<Renderable, T>,
 ): Promise<T> {
   return toast.promise(promise, {
     success: success,
@@ -93,7 +93,7 @@ type AwaitedReturnType<FuncType extends AsyncFunction> =
  * ```
  */
 export function useAsyncTaskWithLoadingState<Func extends AsyncFunction>(
-  task: Func
+  task: Func,
 ) {
   const [isLoading, setIsLoading] = useState(false);
 

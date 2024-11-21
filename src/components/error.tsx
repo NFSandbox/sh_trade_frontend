@@ -26,14 +26,14 @@ export function ErrorCard(props: ErrorCardProps) {
           "flex-col justify-center items-center p-2",
           "gap-y-2",
           hasColor ? "bg-fgcolor dark:bg-fgcolor-dark rounded-xl" : "",
-          props.className ?? ""
+          props.className ?? "",
         )}
       >
         {/*Error Title Part*/}
         <p
           className={classNames(
             "font-bold text-black/70 dark:text-white/90",
-            "bg-black/10 dark:bg-white/10 px-2 py-1 rounded-md"
+            "bg-black/10 dark:bg-white/10 px-2 py-1 rounded-md",
           )}
         >
           {props.title}

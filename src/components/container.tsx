@@ -97,7 +97,7 @@ export function Container({
           hasShadow ? "shadow-lg" : "",
           rounded ? "rounded-lg" : "",
           expand ? "h-full w-full" : "",
-          className
+          className,
         )}
         style={style as CSSProperties}
       >
@@ -106,7 +106,7 @@ export function Container({
             "flex flex-auto h-full w-full min-w-0 min-h-0",
             hasHoverColor ? "hover:bg-black/5 dark:hover:bg-white/5" : "",
             hasHoverColorTrans ? "transition-colors" : "",
-            center ? "justify-center content-center" : ""
+            center ? "justify-center content-center" : "",
           )}
         >
           {children}
@@ -232,7 +232,7 @@ export function FlexDiv(props: FlexDivProps) {
           vertical ? "flex-col" : "",
           hasPadding ? "px-2 py-2" : "",
           center ? "justify-center items-center" : "",
-          className
+          className,
         )}
         id={id}
         style={style}
@@ -263,7 +263,7 @@ export function Center({
       expand={true}
       className={classNames(
         "flex-row justify-center items-center",
-        className ?? ""
+        className ?? "",
       )}
       {...props}
     >

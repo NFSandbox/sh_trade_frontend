@@ -99,7 +99,7 @@ export function ContactInfoItem(props: ContactInfoItemProps) {
     <div
       className={classNames(
         // 'w-full grid grid-cols-12 items-center',
-        "rounded-lg hover:bg-bgcolor/50 dark:hover:bg-white/10 py-2"
+        "rounded-lg hover:bg-bgcolor/50 dark:hover:bg-white/10 py-2",
       )}
     >
       <div style={gridCssStyle}>
@@ -217,7 +217,7 @@ function InlineTag(props: InlineTagProps) {
       className={classNames(
         "flex flex-none flex-row items-center px-[0.5rem] py-[0.1rem] rounded-lg text-white/80 text-[0.8rem]",
         props.color,
-        props.className ?? ""
+        props.className ?? "",
       )}
     >
       {props.icon ?? undefined}

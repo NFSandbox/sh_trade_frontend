@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 
 /**
  * Calculate total page with `limit` and `total`
@@ -12,7 +12,7 @@ import React, {useState} from "react";
  */
 export function getTotalPage(limit: number, total: number): number {
   if (limit <= 0 || total < 0) {
-    throw 'invalid_input_number';
+    throw "invalid_input_number";
   }
 
   let res = Math.floor(total / limit);
@@ -32,20 +32,19 @@ export function getTotalPage(limit: number, total: number): number {
  */
 export function addKeysPropsForAnArray<ArrayElementType>(
   arr: ArrayElementType[],
-  keyGenerator: (value: ArrayElementType) => (React.Key)
+  keyGenerator: (value: ArrayElementType) => React.Key,
 ): (ArrayElementType & { key: React.Key })[] {
   arr = arr.map(function (value) {
     let keyForThisElement = keyGenerator(value);
-    return {...value, key: keyForThisElement};
+    return { ...value, key: keyForThisElement };
   });
   return arr as (ArrayElementType & { key: React.Key })[];
 }
 
-
 // use to limit the input type of `extractKeysFromList()`
 type hasKeyPropsType = {
   key: React.Key;
-}
+};
 
 /**
  * Extract all keys from the items in an array, and return that list of keys
@@ -54,7 +53,9 @@ type hasKeyPropsType = {
  * - `arr` An array whose item has `key` props. The array that you want to extract
  * `key` props from.
  */
-export function extractKeysFromList<T extends hasKeyPropsType>(arr: T[]): React.Key[] {
+export function extractKeysFromList<T extends hasKeyPropsType>(
+  arr: T[],
+): React.Key[] {
   let keyList = [];
   for (let item of arr) {
     keyList.push(item.key);
@@ -81,11 +82,13 @@ export function extractKeysFromList<T extends hasKeyPropsType>(arr: T[]): React.
 export function usePaginationState<StaleDataType>(
   initLimit: number = 20,
   initCursor: number = 0,
-  initStaleData?: StaleDataType) {
+  initStaleData?: StaleDataType,
+) {
   const [limit, setLimit] = useState(initLimit);
   const [cursor, setCursor] = useState(initCursor);
-  const [staleData, setStaleData] =
-    useState<StaleDataType | undefined>(initStaleData ?? undefined);
+  const [staleData, setStaleData] = useState<StaleDataType | undefined>(
+    initStaleData ?? undefined,
+  );
   return {
     limit,
     setLimit,

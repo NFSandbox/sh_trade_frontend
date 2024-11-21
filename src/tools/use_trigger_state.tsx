@@ -1,7 +1,7 @@
-'use client';
+"use client";
 
-import {useState} from "react";
-import {setDefault} from '@/tools/set_default';
+import { useState } from "react";
+import { setDefault } from "@/tools/set_default";
 
 export interface UseTriggerStateReturnProps {
   isTriggered: boolean;
@@ -11,7 +11,9 @@ export interface UseTriggerStateReturnProps {
 /**
  * Allow user to quickly create a state for trigger control
  */
-export function useTriggerState(initialState: boolean): UseTriggerStateReturnProps {
+export function useTriggerState(
+  initialState: boolean,
+): UseTriggerStateReturnProps {
   // store the trigger boolean state
   const [isTriggered, setIsTriggered] = useState(initialState);
 
@@ -21,8 +23,8 @@ export function useTriggerState(initialState: boolean): UseTriggerStateReturnPro
     setIsTriggered(newState);
   }
 
-  return ({
+  return {
     isTriggered,
     triggerState,
-  });
+  };
 }

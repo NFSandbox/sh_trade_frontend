@@ -23,7 +23,7 @@ import { asyncSleep } from "@/tools/general";
  * If success, return `string` of current logged in account's role name. If not logged in, return `null`.
  */
 export async function updateUserDescription(
-  description: string
+  description: string,
 ): Promise<unknown> {
   let data = null;
 
@@ -47,7 +47,7 @@ export interface ContactInfoIn {
 }
 
 export async function getContactInfo(
-  user_id?: number
+  user_id?: number,
 ): Promise<ContactInfoIn[] | null> {
   let data = null;
 
@@ -68,7 +68,7 @@ export function useContactInfo(user_id?: number) {
   return useSWR(
     ["/user/contact_info", user_id],
     (keys) => getContactInfo(keys[1]),
-    { keepPreviousData: true }
+    { keepPreviousData: true },
   );
 }
 
@@ -82,7 +82,7 @@ export interface ContactInfoOutNew {
 
 export async function addContactInfo(
   contactInfo: ContactInfoOutNew,
-  userId?: number
+  userId?: number,
 ) {
   let data = null;
 
@@ -103,7 +103,7 @@ export async function addContactInfo(
  */
 export async function removeContactInfo(
   contactInfo: ContactInfoIn,
-  userId?: number
+  userId?: number,
 ) {
   let data = null;
 

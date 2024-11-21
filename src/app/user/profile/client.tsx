@@ -149,7 +149,7 @@ function ContactInfoSegment() {
       <FlexDiv
         className={classNames(
           "flex-col w-full flex-none",
-          isValidating ? "opacity-50" : ""
+          isValidating ? "opacity-50" : "",
         )}
       >
         {contactInfo?.map((contactInfoItem) => {
@@ -175,7 +175,7 @@ function ContactInfoSegment() {
       <FlexDiv
         className={classNames(
           "w-full justify-end",
-          isAddTriggered ? "" : "hidden"
+          isAddTriggered ? "" : "hidden",
         )}
       >
         <Form<ContactInfoOutNew>
@@ -239,7 +239,7 @@ function ContactInfoSegment() {
       <FlexDiv
         className={classNames(
           "place-self-end pr-4",
-          isAddTriggered ? "hidden" : ""
+          isAddTriggered ? "hidden" : "",
         )}
       >
         <Button

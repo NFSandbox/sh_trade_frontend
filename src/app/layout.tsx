@@ -6,30 +6,25 @@ const inter = Inter({ subsets: ["latin"] });
 
 import React from "react";
 import { Toaster } from "react-hot-toast";
-import { AntdRegistry } from '@ant-design/nextjs-registry';
-
-
+import { AntdRegistry } from "@ant-design/nextjs-registry";
 
 // Components
-import { AdaptiveBackground } from '@/components/background';
+import { AdaptiveBackground } from "@/components/background";
 import { ResponsiveLayout } from "@/cus_components/layout";
 
 // Configs
-import * as gene_config from '@/config/general';
-
+import * as gene_config from "@/config/general";
 
 export const metadata: Metadata = {
   title: gene_config.appName,
   description: gene_config.appDesc,
 };
 
-
-export default function RootLayout(
-  {
-    children,
-  }: Readonly<{
-    children: React.ReactNode;
-  }>) {
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
   return (
     <html lang="en">
       <body className={inter.className}>

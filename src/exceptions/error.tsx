@@ -21,7 +21,7 @@ export class NetworkError extends BaseError {
     super(
       "network_error",
       "Network error occurred, " +
-        "please check your Internet connection or maybe there is error occurred at server side."
+        "please check your Internet connection or maybe there is error occurred at server side.",
     );
   }
 }
@@ -30,7 +30,7 @@ export class NetworkError extends BaseError {
  * Try to extract the error info from a Axios response if the error exists.
  */
 export function getBackendErrorFromResponse(
-  response: any
+  response: any,
 ): BaseError | undefined {
   try {
     if (response.data.detail.error === true) {
@@ -63,7 +63,7 @@ export function apiErrorThrower(e: any): never {
         "request_error",
         `成功向服务器发送了请求，但返回值无效，请联系网站管理员。错误详情：${
           e.message ?? "未知错误信息"
-        }`
+        }`,
       );
     }
 
@@ -72,8 +72,8 @@ export function apiErrorThrower(e: any): never {
     throw new BaseError(
       "backend_error",
       `成功向服务器发送了请求，但服务器返回了非标准错误，请联系网站管理员。错误详情：${JSON.stringify(
-        e.response.data.detail
-      )}`
+        e.response.data.detail,
+      )}`,
     );
   }
 
@@ -85,14 +85,14 @@ export function apiErrorThrower(e: any): never {
   // If not axios error, throw unknown error
   throw new BaseError(
     "unknown_error",
-    "Error occurred when requesting API: " + e.message
+    "Error occurred when requesting API: " + e.message,
   );
 }
 
 /**
  * A general popper used to pop any error in this system to user.
- * 
- * This popper use react-hot-toast, and also rely on the text 
+ *
+ * This popper use react-hot-toast, and also rely on the text
  * returned by errorStringifier()
  */
 export function errorPopper(e: any) {

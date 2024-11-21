@@ -1,14 +1,18 @@
 import type { Metadata } from "next";
 
 // Config
-import * as gene_config from '@/config/general';
+import * as gene_config from "@/config/general";
 
 // Components
-import { Center } from '@/components/container';
+import { Center } from "@/components/container";
 
 // Parts
-import * as clients from './client';
+import * as clients from "./client";
 
 export default function Page() {
-    return <Center><clients.SignIn /></Center>
+  return (
+    <Center>
+      <clients.SignIn />
+    </Center>
+  );
 }

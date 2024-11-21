@@ -56,13 +56,13 @@ export function Client() {
         "flex-col gap-4 justify-start items-center",
         "bg-fgcolor dark:bg-fgcolor-dark",
         "overflow-auto",
-        "pt-4" // Initial top padding to avoid content too close to header bar.
+        "pt-4", // Initial top padding to avoid content too close to header bar.
       )}
     >
       <FlexDiv
         className={classNames(
           "flex-col gap-4 justify-start items-start",
-          "w-full max-w-[50rem]"
+          "w-full max-w-[50rem]",
         )}
       >
         {/* Header */}
@@ -90,7 +90,7 @@ function ItemPageHeaderPart(props: ItemInfoProps) {
     <FlexDiv
       className={classNames(
         "flex-col gap-y-2 justify-start items-start",
-        "mark-item-info-header"
+        "mark-item-info-header",
       )}
     >
       <Title>{itemInfo.name}</Title>

@@ -1,46 +1,47 @@
-'use client';
+"use client";
 
-import React, { useState } from 'react';
-import { useRouter } from 'next/navigation';
+import React, { useState } from "react";
+import { useRouter } from "next/navigation";
 
 // Supertokens
 import { signUp, signIn } from "supertokens-web-js/recipe/emailpassword";
 
 // Components
-import type { FormProps } from 'antd';
-import { Button, Checkbox, Form, Input } from 'antd';
-import { FlexDiv, Container } from '@/components/container';
-
+import type { FormProps } from "antd";
+import { Button, Checkbox, Form, Input } from "antd";
+import { FlexDiv, Container } from "@/components/container";
 
 // Tools
-import { classNames } from '@/tools/css_tools';
-import toast from 'react-hot-toast';
-import { asyncSleep } from '@/tools/general';
+import { classNames } from "@/tools/css_tools";
+import toast from "react-hot-toast";
+import { asyncSleep } from "@/tools/general";
 
 // States
-import { useLayoutState, useHeaderTitle } from '@/states/layoutState';
+import { useLayoutState, useHeaderTitle } from "@/states/layoutState";
 
 type FieldType = {
   email?: string;
   password?: string;
 };
 
-
 async function signUpClicked(email: string, password: string) {
   try {
     let response = await signUp({
-      formFields: [{
-        id: "email",
-        value: email
-      }, {
-        id: "password",
-        value: password
-      }]
-    })
+      formFields: [
+        {
+          id: "email",
+          value: email,
+        },
+        {
+          id: "password",
+          value: password,
+        },
+      ],
+    });
 
     if (response.status === "FIELD_ERROR") {
       // one of the input formFields failed validation
-      response.formFields.forEach(formField => {
+      response.formFields.forEach((formField) => {
         if (formField.id === "email") {
           // Email validation failed (for example incorrect email syntax),
           // or the email is not unique.
@@ -50,7 +51,7 @@ async function signUpClicked(email: string, password: string) {
           // Maybe it didn't match the password strength
           toast.error(formField.error);
         }
-      })
+      });
     } else if (response.status === "SIGN_UP_NOT_ALLOWED") {
       // the reason string is a user friendly message
       // about what went wrong. It can also contain a support code which users
@@ -60,7 +61,7 @@ async function signUpClicked(email: string, password: string) {
     } else {
       // sign up successful. The session tokens are automatically handled by
       // the frontend SDK.
-      toast.success('账户注册成功！')
+      toast.success("账户注册成功！");
       return true;
     }
   } catch (err: any) {
@@ -73,35 +74,37 @@ async function signUpClicked(email: string, password: string) {
   }
 }
 
-
 async function signInClicked(email: string, password: string) {
   try {
     let response = await signIn({
-      formFields: [{
-        id: "email",
-        value: email
-      }, {
-        id: "password",
-        value: password
-      }]
-    })
+      formFields: [
+        {
+          id: "email",
+          value: email,
+        },
+        {
+          id: "password",
+          value: password,
+        },
+      ],
+    });
 
     if (response.status === "FIELD_ERROR") {
-      response.formFields.forEach(formField => {
+      response.formFields.forEach((formField) => {
         if (formField.id === "email") {
           // Email validation failed (for example incorrect email syntax).
-          toast.error(formField.error)
+          toast.error(formField.error);
         }
-      })
+      });
     } else if (response.status === "WRONG_CREDENTIALS_ERROR") {
-      toast.error("您输入的邮箱或密码不正确")
+      toast.error("您输入的邮箱或密码不正确");
     } else if (response.status === "SIGN_IN_NOT_ALLOWED") {
       // the reason string is a user friendly message
       // about what went wrong. It can also contain a support code which users
       // can tell you so you know why their sign in was not allowed.
-      toast.error(response.reason)
+      toast.error(response.reason);
     } else {
-      toast.success('用户登录成功');
+      toast.success("用户登录成功");
       return true;
     }
   } catch (err: any) {
@@ -114,92 +117,114 @@ async function signInClicked(email: string, password: string) {
   }
 }
 
-
 export function SignIn() {
   const router = useRouter();
 
   const [isSignUp, setIsSignUp] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  useHeaderTitle('登录 & 注册');
+  useHeaderTitle("登录 & 注册");
 
   // Handle signInUp form submission
-  const handleSignInUpRequest: FormProps<FieldType>['onFinish'] = async function (values) {
-    setIsLoading(true);
-    try {
-      if (isSignUp) { const res = await signUpClicked(values.email!, values.password!); if (!res) { throw Error(); } }
-      else {
-        const res = await signInClicked(values.email!, values.password!); if (!res) { throw Error(); }
+  const handleSignInUpRequest: FormProps<FieldType>["onFinish"] =
+    async function (values) {
+      setIsLoading(true);
+      try {
+        if (isSignUp) {
+          const res = await signUpClicked(values.email!, values.password!);
+          if (!res) {
+            throw Error();
+          }
+        } else {
+          const res = await signInClicked(values.email!, values.password!);
+          if (!res) {
+            throw Error();
+          }
+        }
+
+        await asyncSleep(1000);
+        router.push("/");
+      } catch (e) {
+      } finally {
+        setIsLoading(false);
       }
-
-      await asyncSleep(1000);
-      router.push('/');
-
-    } catch (e) {
-      ;
-    } finally {
-      setIsLoading(false);
-    }
-  };
+    };
 
   return (
     <Container
       rounded={false}
       className={classNames(
-        'p-4 m-2 w-[30rem]',
-        'justify-center',
-        'rounded-2xl shadow-2xl',
-      )}>
-      <FlexDiv className={classNames(
-        'flex-col gap-y-2 justify-start items-start',
-        'w-full',
-      )}>
+        "p-4 m-2 w-[30rem]",
+        "justify-center",
+        "rounded-2xl shadow-2xl",
+      )}
+    >
+      <FlexDiv
+        className={classNames(
+          "flex-col gap-y-2 justify-start items-start",
+          "w-full",
+        )}
+      >
         {/* Title Part */}
-        <FlexDiv className='flex-row gap-x-2 w-full justify-center items-center py-4'>
-          <img src='/assets/icon.svg' height={30} width={30}></img>
-          <h2 className={classNames(
-            'text-2xl', 'text-primary dark:text-primary-light',
-            'self-center',
-            'opacity-80',
-          )}>{isSignUp ? '注册' : '登录'} AHUER.COM</h2>
+        <FlexDiv className="flex-row gap-x-2 w-full justify-center items-center py-4">
+          <img src="/assets/icon.svg" height={30} width={30}></img>
+          <h2
+            className={classNames(
+              "text-2xl",
+              "text-primary dark:text-primary-light",
+              "self-center",
+              "opacity-80",
+            )}
+          >
+            {isSignUp ? "注册" : "登录"} AHUER.COM
+          </h2>
         </FlexDiv>
         <Form
           name="basic"
           // labelCol={{ span: 4 }}
           // wrapperCol={{ span: 20 }}
-          style={{ width: '100%' }}
+          style={{ width: "100%" }}
           onFinish={handleSignInUpRequest}
           // onFinishFailed={onFinishFailed}
           autoComplete="off"
-          className='w-full'
+          className="w-full"
         >
           <Form.Item<FieldType>
             label="邮箱"
             name="email"
-            rules={[{ required: true, message: '邮箱信息不能为空' }]}
+            rules={[{ required: true, message: "邮箱信息不能为空" }]}
           >
-            <Input placeholder='请在此输入您的邮箱' />
+            <Input placeholder="请在此输入您的邮箱" />
           </Form.Item>
 
           <Form.Item<FieldType>
             label="密码"
             name="password"
-            rules={[{ required: true, message: '密码不能为空' }]}
+            rules={[{ required: true, message: "密码不能为空" }]}
           >
-            <Input.Password placeholder='请在此输入您的密码' />
+            <Input.Password placeholder="请在此输入您的密码" />
           </Form.Item>
 
           <Form.Item>
-            <Button loading={isLoading} type="primary" htmlType="submit" className='w-full'>
-              {isSignUp ? '注册' : '登录'}
+            <Button
+              loading={isLoading}
+              type="primary"
+              htmlType="submit"
+              className="w-full"
+            >
+              {isSignUp ? "注册" : "登录"}
             </Button>
           </Form.Item>
         </Form>
 
         {/* Sign in up switch */}
         <Button
-          type='link'
-          onClick={() => { setIsSignUp(!isSignUp) }}>切换至 {isSignUp ? '登录' : '注册'}</Button>
-
+          type="link"
+          onClick={() => {
+            setIsSignUp(!isSignUp);
+          }}
+        >
+          切换至 {isSignUp ? "登录" : "注册"}
+        </Button>
       </FlexDiv>
     </Container>
   );

@@ -48,7 +48,7 @@ export async function getUserItems(
   user_id?: number,
   ignore_sold: boolean = false,
   time_desc: boolean = true,
-  pagination?: gene.PaginationConfig
+  pagination?: gene.PaginationConfig,
 ) {
   try {
     const res = await axiosIns.post(
@@ -62,7 +62,7 @@ export async function getUserItems(
           ignore_sold,
           time_desc,
         },
-      }
+      },
     );
     return res.data as gene.PaginatedResult<ItemIn>;
   } catch (e) {
@@ -73,12 +73,12 @@ export async function getUserItems(
 export function useUserItems(
   user_id?: number,
   ignore_sold: boolean = false,
-  time_desc: boolean = true
+  time_desc: boolean = true,
 ) {
   return useSWR(
     ["/item", user_id, ignore_sold, time_desc],
     () => getUserItems(user_id, ignore_sold, time_desc),
-    { keepPreviousData: true }
+    { keepPreviousData: true },
   );
 }
 
@@ -104,6 +104,6 @@ export function useItemDetailedInfo(item_id: string) {
     () => getItemDetailedInfo(item_id as string), // Fetcher function
     {
       keepPreviousData: true,
-    }
+    },
   );
 }

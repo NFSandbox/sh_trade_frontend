@@ -3,8 +3,6 @@ import Link from "next/link";
 import { classNames } from "@/tools/css_tools";
 import React from "react";
 
-
-
 interface HeaderProps {
   /**
    * The Header Children which will be used as header title (and will become the clickable part.)
@@ -24,44 +22,32 @@ interface HeaderProps {
  * Header components.
  */
 export function Header(props: HeaderProps) {
-  let {
-    link,
-    children,
-    content,
-  } = props;
+  let { link, children, content } = props;
 
   if (link) {
     children = (
-      <Link
-        href={link ?? '#'}
-        className={classNames(
-          'hover:no-underline',
-        )}>
+      <Link href={link ?? "#"} className={classNames("hover:no-underline")}>
         {children}
-      </Link>);
+      </Link>
+    );
   }
 
   return (
     <FlexDiv
-      className={classNames(
-        'w-full z-10',
-        'flex-none',
-        'transition-all')}>
-
+      className={classNames("w-full z-10", "flex-none", "transition-all")}
+    >
       {/*Header Root Flex Div*/}
       <FlexDiv
         className={classNames(
-          'bg-fgcolor dark:bg-fgcolor-dark',
-          'w-full p-2 shadow-lg',
-          'transition-all',
-          'flex-row justify-between items-center',
-        )}>
-
+          "bg-fgcolor dark:bg-fgcolor-dark",
+          "w-full p-2 shadow-lg",
+          "transition-all",
+          "flex-row justify-between items-center",
+        )}
+      >
         {children}
 
-        <FlexDiv>
-          {content}
-        </FlexDiv>
+        <FlexDiv>{content}</FlexDiv>
       </FlexDiv>
     </FlexDiv>
   );
@@ -73,15 +59,18 @@ interface HeaderTitleProps {
 }
 
 export function HeaderTitle(props: HeaderTitleProps) {
-  let {
-    children,
-    usePrimary,
-  } = props;
+  let { children, usePrimary } = props;
 
   usePrimary = usePrimary ?? true;
 
-  return (<p className={classNames(
-    usePrimary ? 'text-primary dark:text-primary-light' : '',
-    'text-xl font-bold md:text-2xl',
-  )}>{children}</p>);
+  return (
+    <p
+      className={classNames(
+        usePrimary ? "text-primary dark:text-primary-light" : "",
+        "text-xl font-bold md:text-2xl",
+      )}
+    >
+      {children}
+    </p>
+  );
 }

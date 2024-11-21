@@ -87,7 +87,7 @@ export function ItemCard(props: ItemCardProps) {
         // Hover effect when clickable
         clickable
           ? "hover:bg-bgcolor/50 dark:hover:bg-bgcolor-dark/50 transition-all"
-          : ""
+          : "",
         // Border
         // "border-bgcolor dark:bg-bgcolor-dark border-2"
       )}
@@ -226,7 +226,7 @@ function ItemCardPicture(props: ItemCardPictureProps) {
     <div
       className={classNames(
         "w-full h-[8rem] place-items-center place-content-center bg-primary/50",
-        "rounded-xl"
+        "rounded-xl",
       )}
     >
       <p className="text-white font-bold font-mono">Image Placeholder</p>
