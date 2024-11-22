@@ -55,7 +55,7 @@ export function Client() {
   }
 
   return (
-    <FlexDiv className="flex-col w-full gap-4 justify-start items-center pr-4">
+    <FlexDiv className="w-full flex-col items-center justify-start gap-4 pr-4">
       <Button
         onClick={() => {
           setClickable(!clickable);

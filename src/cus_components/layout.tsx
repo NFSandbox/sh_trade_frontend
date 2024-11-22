@@ -78,7 +78,7 @@ function CusHeader() {
         <Link href={"/"}>
           <FlexDiv
             className={classNames(
-              "flex-row items-center justify-start hover:scale-[0.98] gap-x-2 transition-all",
+              "flex-row items-center justify-start gap-x-2 transition-all hover:scale-[0.98]",
             )}
           >
             {/* Icon */}
@@ -90,7 +90,7 @@ function CusHeader() {
             />
             <h1
               className={classNames(
-                "font-light text-2xl text-primary dark:text-primary-light hidden md:flex",
+                "hidden text-2xl font-light text-primary dark:text-primary-light md:flex",
               )}
             >
               {gene_config.appName}
@@ -102,7 +102,7 @@ function CusHeader() {
         {title && (
           <h2
             className={classNames(
-              "text-xl text-light text-black/50 dark:text-white/50",
+              "text-light text-xl text-black/50 dark:text-white/50",
             )}
           >
             {title}
@@ -117,7 +117,7 @@ function HeaderContent() {
   return (
     <FlexDiv
       className={classNames(
-        "flex-none flex-row gap-x-2 justify-center items-center px-2",
+        "flex-none flex-row items-center justify-center gap-x-2 px-2",
       )}
     >
       <UserAvatar />
@@ -171,7 +171,7 @@ function UserAvatar() {
         <span className="font-mono">{userInfo?.user_id}</span>
       </p>
 
-      <FlexDiv className="flex-col flex-none pt-2">
+      <FlexDiv className="flex-none flex-col pt-2">
         <HoverMenuButton href="/user" icon={<AiOutlineUser size={20} />}>
           个人资料
         </HoverMenuButton>

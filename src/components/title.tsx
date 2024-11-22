@@ -12,8 +12,8 @@ export function Title({ children }: TitleProps) {
     <>
       <p
         className={classNames(
-          "font-bold text-lg mt-2",
-          "md:text-xl md:mt-4 opacity-90",
+          "mt-2 text-lg font-bold",
+          "opacity-90 md:mt-4 md:text-xl",
         )}
       >
         {children}

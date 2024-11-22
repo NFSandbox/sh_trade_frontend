@@ -1,40 +1,21 @@
 "use client";
 
-import React, { CSSProperties, ReactNode } from "react";
+import React, { CSSProperties } from "react";
 import Link from "next/link";
 
-// Supertokens
-// import SuperTokens from 'supertokens-web-js';
-import SuperTokens from "supertokens-web-js";
-import Session from "supertokens-web-js/recipe/session";
-import EmailPassword from "supertokens-web-js/recipe/emailpassword";
-
 // Components
-import { Header } from "@/components/header";
-import { Center, Container, FlexDiv } from "@/components/container";
-import { Divider, Popover, Avatar, Button, ButtonProps } from "antd";
+import { FlexDiv } from "@/components/container";
+import { Button } from "antd";
 
 // Icons
-import { AiOutlineUser, AiOutlineNotification } from "react-icons/ai";
-import { IoMdNotificationsOutline } from "react-icons/io";
-import { PiSignOut } from "react-icons/pi";
-import { AiOutlineInbox } from "react-icons/ai";
 import { IoIosMore } from "react-icons/io";
-import { AiFillClockCircle, AiOutlineClockCircle } from "react-icons/ai";
+import { AiOutlineClockCircle } from "react-icons/ai";
 
 // Apis
-import { getMe, useGetMe } from "@/api/auth";
 import { ItemIn } from "@/api/item";
-
-// states
-import { useLayoutState } from "@/states/layoutState";
-
-// configs
-import * as gene_config from "@/config/general";
 
 // Tools
 import { classNames } from "@/tools/css_tools";
-import { errorPopper } from "@/exceptions/error";
 import { setDefault } from "@/tools/set_default";
 
 import * as dayjs from "dayjs";
@@ -81,12 +62,12 @@ export function ItemCard(props: ItemCardProps) {
         "mark-item-flex-box",
         widthTw,
         // Spacing
-        "flex-col justify-start items-start text-start",
+        "flex-col items-start justify-start text-start",
         // Rounded
         "rounded-2xl",
         // Hover effect when clickable
         clickable
-          ? "hover:bg-bgcolor/50 dark:hover:bg-bgcolor-dark/50 transition-all"
+          ? "transition-all hover:bg-bgcolor/50 dark:hover:bg-bgcolor-dark/50"
           : "",
         // Border
         // "border-bgcolor dark:bg-bgcolor-dark border-2"
@@ -96,17 +77,17 @@ export function ItemCard(props: ItemCardProps) {
       <ItemCardPicture></ItemCardPicture>
 
       {/* Text Content Part */}
-      <FlexDiv className="flex-col w-full py-2 px-1">
+      <FlexDiv className="w-full flex-col px-1 py-2">
         {/* Item Name  */}
         <h2 className="font-bold">{itemInfo.name ?? "暂无物品标题"}</h2>
 
         {/* Item Price & More Button */}
-        <FlexDiv className="flex-row flex-none justify-between items-center">
+        <FlexDiv className="flex-none flex-row items-center justify-between">
           {/* Price  */}
-          <FlexDiv className="flex-none flex-row justify-start items-baseline">
+          <FlexDiv className="flex-none flex-row items-baseline justify-start">
             {/* Price Symbol  */}
-            <FlexDiv className="flex-none w-4 items-center justify-center">
-              <p className="opacity-50 text-sm">$</p>
+            <FlexDiv className="w-4 flex-none items-center justify-center">
+              <p className="text-sm opacity-50">$</p>
             </FlexDiv>
             {/* Price Number  */}
             <span className="text-xl text-primary dark:text-primary-light">
@@ -123,9 +104,9 @@ export function ItemCard(props: ItemCardProps) {
         </FlexDiv>
 
         {/* Published Time  */}
-        <FlexDiv className="flex-row flex-none items-center opacity-50">
+        <FlexDiv className="flex-none flex-row items-center opacity-50">
           {/* Clock Icon  */}
-          <FlexDiv className="flex-none w-4 justify-center">
+          <FlexDiv className="w-4 flex-none justify-center">
             <AiOutlineClockCircle className="inline"></AiOutlineClockCircle>
           </FlexDiv>
 
@@ -220,16 +201,16 @@ interface ItemCardPictureProps {
  * while keeping a certain ratio.
  */
 function ItemCardPicture(props: ItemCardPictureProps) {
-  let { imgId } = props;
+  const { imgId } = props;
 
   return (
     <div
       className={classNames(
-        "w-full h-[8rem] place-items-center place-content-center bg-primary/50",
+        "h-[8rem] w-full place-content-center place-items-center bg-primary/50",
         "rounded-xl",
       )}
     >
-      <p className="text-white font-bold font-mono">Image Placeholder</p>
+      <p className="font-mono font-bold text-white">Image Placeholder</p>
     </div>
   );
 }

@@ -32,7 +32,7 @@ export interface ItemIn {
 }
 
 export interface ItemDetailedIn extends ItemIn {
-  user: UserIn;
+  seller: UserIn;
   fav_count: number;
 }
 

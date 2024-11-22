@@ -23,9 +23,9 @@ export function ErrorCard(props: ErrorCardProps) {
       <FlexDiv
         expand
         className={classNames(
-          "flex-col justify-center items-center p-2",
+          "flex-col items-center justify-center p-2",
           "gap-y-2",
-          hasColor ? "bg-fgcolor dark:bg-fgcolor-dark rounded-xl" : "",
+          hasColor ? "rounded-xl bg-fgcolor dark:bg-fgcolor-dark" : "",
           props.className ?? "",
         )}
       >
@@ -33,7 +33,7 @@ export function ErrorCard(props: ErrorCardProps) {
         <p
           className={classNames(
             "font-bold text-black/70 dark:text-white/90",
-            "bg-black/10 dark:bg-white/10 px-2 py-1 rounded-md",
+            "rounded-md bg-black/10 px-2 py-1 dark:bg-white/10",
           )}
         >
           {props.title}
@@ -66,9 +66,9 @@ export function LoadingSkeleton() {
 export function LoadingPage() {
   return (
     // Outer Flex, Make sure skeleton UI shows at the center of the screen
-    <FlexDiv className="flex-auto flex-col h-full w-full justify-start items-center p-4">
+    <FlexDiv className="h-full w-full flex-auto flex-col items-center justify-start p-4">
       {/* Inner Flex, Controls the max width of skeleton UI */}
-      <FlexDiv className="flex-col gap-4 w-full max-w-[50rem] justify-start items-center">
+      <FlexDiv className="w-full max-w-[50rem] flex-col items-center justify-start gap-4">
         <LoadingSkeleton />
         <LoadingSkeleton />
       </FlexDiv>

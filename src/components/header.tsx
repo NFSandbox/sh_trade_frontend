@@ -34,7 +34,7 @@ export function Header(props: HeaderProps) {
 
   return (
     <FlexDiv
-      className={classNames("w-full z-10", "flex-none", "transition-all")}
+      className={classNames("z-10 w-full", "flex-none", "transition-all")}
     >
       {/*Header Root Flex Div*/}
       <FlexDiv
@@ -42,7 +42,7 @@ export function Header(props: HeaderProps) {
           "bg-fgcolor dark:bg-fgcolor-dark",
           "w-full p-2 shadow-lg",
           "transition-all",
-          "flex-row justify-between items-center",
+          "flex-row items-center justify-between",
         )}
       >
         {children}

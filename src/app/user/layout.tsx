@@ -59,7 +59,7 @@ export default function UserProfileLayOut(props: UserProfileLayOutProps) {
       className="flex-row justify-center bg-fgcolor dark:bg-fgcolor-dark"
     >
       {/* Left Nav Bar */}
-      <FlexDiv className="flex-none m-4 rounded-xl overflow-hidden">
+      <FlexDiv className="m-4 flex-none overflow-hidden rounded-xl">
         <Menu
           mode="inline"
           defaultSelectedKeys={["profile"]}
@@ -72,7 +72,7 @@ export default function UserProfileLayOut(props: UserProfileLayOutProps) {
       {/* Children takes all rest space*/}
       {/* Here, we must set justify-start for this children wrapper. So that when children are not high enough to trigger scrolling */}
       {/* The content will be put at the top of the page, instead of being centered (which is not the normal case) */}
-      <FlexDiv className="h-full w-full max-w-[50rem] flex-col justify-start items-center overflow-y-auto profile-layout-children-root">
+      <FlexDiv className="profile-layout-children-root h-full w-full max-w-[50rem] flex-col items-center justify-start overflow-y-auto">
         {props.children}
       </FlexDiv>
     </FlexDiv>

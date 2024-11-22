@@ -6,6 +6,7 @@ import { useSearchParams } from "next/navigation";
 import { FlexDiv, Center } from "@/components/container";
 import { Title } from "@/components/title";
 import { Button, Input } from "antd";
+import { CusUserBar } from "@/cus_components/user";
 import { ErrorCard, LoadingPage } from "@/components/error";
 
 // States
@@ -15,10 +16,12 @@ import { useStore } from "@/tools/use_store";
 
 // Api
 import { useItemDetailedInfo, ItemDetailedIn, ItemIn } from "@/api/item";
+import { UserIn } from "@/api/auth";
 
 // Tools
 import { classNames } from "@/tools/css_tools";
 import { errorPopper } from "@/exceptions/error";
+import * as dayjs from "dayjs";
 
 export function Client() {
   const params = useSearchParams();
@@ -53,7 +56,7 @@ export function Client() {
     <FlexDiv
       expand
       className={classNames(
-        "flex-col gap-4 justify-start items-center",
+        "flex-col items-center justify-start gap-4",
         "bg-fgcolor dark:bg-fgcolor-dark",
         "overflow-auto",
         "pt-4", // Initial top padding to avoid content too close to header bar.
@@ -61,7 +64,8 @@ export function Client() {
     >
       <FlexDiv
         className={classNames(
-          "flex-col gap-4 justify-start items-start",
+          "p-4",
+          "flex-col items-start justify-start gap-4",
           "w-full max-w-[50rem]",
         )}
       >
@@ -73,7 +77,7 @@ export function Client() {
 }
 
 interface ItemInfoProps {
-  itemInfo: ItemIn;
+  itemInfo: ItemDetailedIn;
 }
 
 /**
@@ -84,16 +88,41 @@ interface ItemInfoProps {
  */
 function ItemPageHeaderPart(props: ItemInfoProps) {
   const { itemInfo } = props;
+  const { seller, fav_count } = itemInfo;
+  const publishedDayJs: dayjs.Dayjs = (dayjs as any)(itemInfo.created_time);
+  const pubTimeStr = publishedDayJs.format("YYYY/MM/DD hh:mm");
 
   return (
     // Header Root Flex Div
     <FlexDiv
       className={classNames(
-        "flex-col gap-y-2 justify-start items-start",
+        "w-full",
+        "flex-col items-start justify-start gap-y-2",
         "mark-item-info-header",
       )}
     >
+      {/* Item Name  */}
       <Title>{itemInfo.name}</Title>
+
+      <FlexDiv className="w-full flex-row items-center justify-between">
+        {/* Published Time  */}
+        <h2 className={classNames("opacity-50")}>发布于: {pubTimeStr}</h2>
+
+        {/* Seller Info  */}
+        <HeaderUserInfoPart user={seller}></HeaderUserInfoPart>
+      </FlexDiv>
+
+      {/* Tags */}
     </FlexDiv>
   );
+}
+
+interface HeaderUserInfoPartProps {
+  user: UserIn;
+}
+
+function HeaderUserInfoPart(props: HeaderUserInfoPartProps) {
+  const { user } = props;
+
+  return <CusUserBar user={user}></CusUserBar>;
 }

@@ -99,7 +99,7 @@ export function ContactInfoItem(props: ContactInfoItemProps) {
     <div
       className={classNames(
         // 'w-full grid grid-cols-12 items-center',
-        "rounded-lg hover:bg-bgcolor/50 dark:hover:bg-white/10 py-2",
+        "rounded-lg py-2 hover:bg-bgcolor/50 dark:hover:bg-white/10",
       )}
     >
       <div style={gridCssStyle}>
@@ -110,7 +110,7 @@ export function ContactInfoItem(props: ContactInfoItemProps) {
 
         {/* Contact Info */}
         <div className="flex flex-row items-center gap-2">
-          <p className="font-mono text-start text-wrap overflow-hidden overflow-ellipsis">
+          <p className="overflow-hidden overflow-ellipsis text-wrap text-start font-mono">
             {contactInfo.contact_info}
           </p>
           {/* Verified Tags */}
@@ -127,7 +127,7 @@ export function ContactInfoItem(props: ContactInfoItemProps) {
 
         {/* Actions */}
         {props.onRemove && (
-          <div className="px-4 justify-self-end">
+          <div className="justify-self-end px-4">
             <Button
               type="default"
               loading={isRemoving}
@@ -215,7 +215,7 @@ function InlineTag(props: InlineTagProps) {
   let content = (
     <span
       className={classNames(
-        "flex flex-none flex-row items-center px-[0.5rem] py-[0.1rem] rounded-lg text-white/80 text-[0.8rem]",
+        "flex flex-none flex-row items-center rounded-lg px-[0.5rem] py-[0.1rem] text-[0.8rem] text-white/80",
         props.color,
         props.className ?? "",
       )}

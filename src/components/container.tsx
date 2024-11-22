@@ -91,7 +91,7 @@ export function Container({
       <div
         id={id}
         className={classNames(
-          "flex min-w-0 min-h-0 overflow-hidden",
+          "flex min-h-0 min-w-0 overflow-hidden",
           hasColor ? "bg-fgcolor dark:bg-fgcolor-dark" : "",
           selected ? "bg-primary text-white" : "",
           hasShadow ? "shadow-lg" : "",
@@ -103,10 +103,10 @@ export function Container({
       >
         <div
           className={classNames(
-            "flex flex-auto h-full w-full min-w-0 min-h-0",
+            "flex h-full min-h-0 w-full min-w-0 flex-auto",
             hasHoverColor ? "hover:bg-black/5 dark:hover:bg-white/5" : "",
             hasHoverColorTrans ? "transition-colors" : "",
-            center ? "justify-center content-center" : "",
+            center ? "content-center justify-center" : "",
           )}
         >
           {children}
@@ -231,7 +231,7 @@ export function FlexDiv(props: FlexDivProps) {
           expand ? "h-full w-full" : "",
           vertical ? "flex-col" : "",
           hasPadding ? "px-2 py-2" : "",
-          center ? "justify-center items-center" : "",
+          center ? "items-center justify-center" : "",
           className,
         )}
         id={id}
@@ -262,7 +262,7 @@ export function Center({
     <FlexDiv
       expand={true}
       className={classNames(
-        "flex-row justify-center items-center",
+        "flex-row items-center justify-center",
         className ?? "",
       )}
       {...props}

@@ -61,7 +61,7 @@ export function Client(props: ClientProps) {
   const { data, isLoading } = useGetMeForce();
 
   return (
-    <FlexDiv className="flex-col w-full justify-start items-start">
+    <FlexDiv className="w-full flex-col items-start justify-start">
       <UserData />
       <ContactInfoSegment />
     </FlexDiv>
@@ -94,7 +94,7 @@ export function UserData() {
     content = (
       <>
         {/* Avatar, UserName ID Part */}
-        <FlexDiv className="flex-none flex-row gap-x-2 items-center">
+        <FlexDiv className="flex-none flex-row items-center gap-x-2">
           {/* Avatar */}
           <Avatar size={60} gap={0}>
             {userInfo?.username.substring(0, 3)}
@@ -148,7 +148,7 @@ function ContactInfoSegment() {
       // List Of Contact Info
       <FlexDiv
         className={classNames(
-          "flex-col w-full flex-none",
+          "w-full flex-none flex-col",
           isValidating ? "opacity-50" : "",
         )}
       >

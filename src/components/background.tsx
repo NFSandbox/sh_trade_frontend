@@ -102,7 +102,7 @@ export function AdaptiveBackground(props: AdaptiveBackgroundProps) {
         "flex-none",
         fullScreen ? "h-screen w-screen" : "h-full w-full",
         "bg-bgcolor dark:bg-bgcolor-dark",
-        "flex-col justify-start items-center",
+        "flex-col items-center justify-start",
         "dark:[color-scheme:dark]",
         "text-sm",
         "text-black dark:text-white",

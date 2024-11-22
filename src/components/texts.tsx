@@ -21,7 +21,7 @@ export function NoticeText(props: NoticeTextProps) {
       className={classNames(
         "text-black/50 dark:text-white/50",
         hasColor ? "bg-bgcolor/50 dark:bg-bgcolor-dark/50" : "",
-        "p-2 rounded-xl",
+        "rounded-xl p-2",
       )}
     >
       {props.children}

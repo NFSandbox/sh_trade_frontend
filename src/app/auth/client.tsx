@@ -153,19 +153,19 @@ export function SignIn() {
     <Container
       rounded={false}
       className={classNames(
-        "p-4 m-2 w-[30rem]",
+        "m-2 w-[30rem] p-4",
         "justify-center",
         "rounded-2xl shadow-2xl",
       )}
     >
       <FlexDiv
         className={classNames(
-          "flex-col gap-y-2 justify-start items-start",
+          "flex-col items-start justify-start gap-y-2",
           "w-full",
         )}
       >
         {/* Title Part */}
-        <FlexDiv className="flex-row gap-x-2 w-full justify-center items-center py-4">
+        <FlexDiv className="w-full flex-row items-center justify-center gap-x-2 py-4">
           <img src="/assets/icon.svg" height={30} width={30}></img>
           <h2
             className={classNames(

@@ -21,7 +21,7 @@ export default function NotFound() {
   return (
     <Center>
       <FlexDiv
-        className={classNames("flex-col justify-center items-center gap-y-2")}
+        className={classNames("flex-col items-center justify-center gap-y-2")}
       >
         <ErrorCard
           hasColor={false}

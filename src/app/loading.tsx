@@ -8,9 +8,9 @@ export default function Loading() {
   return (
     <FlexDiv
       expand
-      className={classNames("flex-col justify-start items-center", "p-4")}
+      className={classNames("flex-col items-center justify-start", "p-4")}
     >
-      <FlexDiv className="flex-col items-center justify-center w-full max-w-[50rem] gap-4">
+      <FlexDiv className="w-full max-w-[50rem] flex-col items-center justify-center gap-4">
         <Skeleton active />
         <Skeleton active />
       </FlexDiv>
