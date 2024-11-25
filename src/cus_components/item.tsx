@@ -12,7 +12,7 @@ import { IoIosMore } from "react-icons/io";
 import { AiOutlineClockCircle } from "react-icons/ai";
 
 // Apis
-import { ItemIn } from "@/api/item";
+import { ItemIn, TagIn } from "@/api/item";
 
 // Tools
 import { classNames } from "@/tools/css_tools";
@@ -212,5 +212,39 @@ function ItemCardPicture(props: ItemCardPictureProps) {
     >
       <p className="font-mono font-bold text-white">Image Placeholder</p>
     </div>
+  );
+}
+
+interface ItemTagProps {
+  tagInfo: TagIn;
+}
+
+/**
+ * Component to show a single tag.
+ */
+export function ItemTag(props: ItemTagProps) {
+  return (
+    // TODO
+    // More detailed info
+    <p className={classNames("px-2 py-1", "rounded-lg")}>
+      {props.tagInfo.name}
+    </p>
+  );
+}
+
+interface ItemTagsGridProps {
+  tags: TagIn[];
+}
+
+/**
+ * React component to render a list of tags with auto-wrapping.
+ */
+export function ItemTagsGrid(props: ItemTagsGridProps) {
+  return (
+    <FlexDiv className={classNames("w-full flex-wrap gap-2")}>
+      {props.tags.map((tag) => {
+        return <ItemTag tagInfo={tag}></ItemTag>;
+      })}
+    </FlexDiv>
   );
 }

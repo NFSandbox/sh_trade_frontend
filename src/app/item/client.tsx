@@ -8,6 +8,7 @@ import { Title } from "@/components/title";
 import { Button, Input } from "antd";
 import { CusUserBar } from "@/cus_components/user";
 import { ErrorCard, LoadingPage } from "@/components/error";
+import { AiOutlineTag } from "react-icons/ai";
 
 // States
 import { useLayoutState, useHeaderTitle } from "@/states/layoutState";
@@ -15,7 +16,7 @@ import { useSettingsState } from "@/states/settingsState";
 import { useStore } from "@/tools/use_store";
 
 // Api
-import { useItemDetailedInfo, ItemDetailedIn, ItemIn } from "@/api/item";
+import { useItemDetailedInfo, ItemDetailedIn, ItemIn, TagIn } from "@/api/item";
 import { UserIn } from "@/api/auth";
 
 // Tools
@@ -104,6 +105,7 @@ function ItemPageHeaderPart(props: ItemInfoProps) {
       {/* Item Name  */}
       <Title>{itemInfo.name}</Title>
 
+      {/* Row Display For Pub Time and Seller  */}
       <FlexDiv className="w-full flex-row items-center justify-between">
         {/* Published Time  */}
         <h2 className={classNames("opacity-50")}>发布于: {pubTimeStr}</h2>
@@ -111,6 +113,9 @@ function ItemPageHeaderPart(props: ItemInfoProps) {
         {/* Seller Info  */}
         <HeaderUserInfoPart user={seller}></HeaderUserInfoPart>
       </FlexDiv>
+
+      {/* Tags  */}
+      <HeaderTagsPart tagList={itemInfo.tags}></HeaderTagsPart>
 
       {/* Tags */}
     </FlexDiv>
@@ -125,4 +130,23 @@ function HeaderUserInfoPart(props: HeaderUserInfoPartProps) {
   const { user } = props;
 
   return <CusUserBar user={user}></CusUserBar>;
+}
+
+interface HeaderTagsPartProps {
+  tagList: TagIn[];
+}
+
+function HeaderTagsPart(props: HeaderTagsPartProps) {
+  const { tagList } = props;
+
+  if (tagList === null) {
+    return (
+      <p className={classNames("opacity-50")}>
+        <AiOutlineTag size={20} className="inline-block"></AiOutlineTag>{" "}
+        此物品暂无标签
+      </p>
+    );
+  }
+
+  return <pre>{JSON.stringify(tagList)}</pre>;
 }

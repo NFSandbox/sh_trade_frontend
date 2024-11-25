@@ -19,6 +19,12 @@ import { asyncSleep } from "@/tools/general";
 import * as gene from "./general";
 import { UserIn } from "./auth";
 
+export interface TagIn {
+  tag_id: number;
+  tag_type: string;
+  name: string;
+}
+
 export interface ItemIn {
   item_id: number;
   user_id: number;
@@ -28,7 +34,8 @@ export interface ItemIn {
   created_time: number;
   sold: boolean;
   hidden: boolean;
-  // Define other properties based on the item structure returned by the API
+  tags: TagIn[];
+  tag_name_list: string[];
 }
 
 export interface ItemDetailedIn extends ItemIn {
