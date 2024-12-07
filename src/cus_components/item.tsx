@@ -9,7 +9,7 @@ import { Button } from "antd";
 
 // Icons
 import { IoIosMore } from "react-icons/io";
-import { AiOutlineClockCircle } from "react-icons/ai";
+import { AiOutlineClockCircle, AiOutlinePlusCircle } from "react-icons/ai";
 
 // Apis
 import { ItemIn, TagIn } from "@/api/item";
@@ -140,6 +140,11 @@ export function ItemCard(props: ItemCardProps) {
 
 interface AdaptiveItemGridProps {
   itemInfoList: ItemIn[];
+
+  /**
+   * Show an extra grid item to prompt user add new item.
+   */
+  showAddNewItem?: boolean;
 }
 
 /**
@@ -163,14 +168,7 @@ export function AdaptiveItemGrid(props: AdaptiveItemGridProps) {
 
   return (
     <FlexDiv className="w-full flex-col items-center justify-start">
-      <FlexDiv
-        style={autoItemGridCss}
-        className={
-          classNames()
-          // "flex-row flex-wrap items-start justify-start",
-          // "gap-4"
-        }
-      >
+      <FlexDiv style={autoItemGridCss} className={classNames()}>
         {itemInfoList.map(function (itemInfo) {
           return (
             <ItemCard
@@ -180,6 +178,23 @@ export function AdaptiveItemGrid(props: AdaptiveItemGridProps) {
             ></ItemCard>
           );
         })}
+
+        {/* Add New Item Grid Item  */}
+        {props.showAddNewItem && (
+          <Link
+            href="/user/item/add"
+            className={classNames(
+              "h-[8rem] w-full place-content-center place-items-center bg-bgcolor/50 dark:bg-bgcolor-dark/50",
+              "rounded-xl",
+              "hover:opacity-80",
+            )}
+          >
+            <div className="place-items-center opacity-70">
+              <AiOutlinePlusCircle size={35}></AiOutlinePlusCircle>
+              <p className="pt-2">添加新物品</p>
+            </div>
+          </Link>
+        )}
       </FlexDiv>
     </FlexDiv>
   );

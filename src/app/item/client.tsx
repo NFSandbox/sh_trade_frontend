@@ -8,7 +8,14 @@ import { Title } from "@/components/title";
 import { Button, Input } from "antd";
 import { CusUserBar } from "@/cus_components/user";
 import { ErrorCard, LoadingPage } from "@/components/error";
-import { AiOutlineTag } from "react-icons/ai";
+import {
+  AiOutlineTag,
+  AiOutlineShoppingCart,
+  AiOutlineHeart,
+  AiFillHeart,
+  AiOutlineWarning,
+} from "react-icons/ai";
+import { Divider } from "antd";
 
 // States
 import { useLayoutState, useHeaderTitle } from "@/states/layoutState";
@@ -72,6 +79,12 @@ export function Client() {
       >
         {/* Header */}
         <ItemPageHeaderPart itemInfo={data}></ItemPageHeaderPart>
+
+        {/* Item Desc  */}
+        <ItemDescPart itemInfo={data}></ItemDescPart>
+
+        {/* Action Bar  */}
+        <ActionBarPart></ActionBarPart>
       </FlexDiv>
     </FlexDiv>
   );
@@ -116,8 +129,6 @@ function ItemPageHeaderPart(props: ItemInfoProps) {
 
       {/* Tags  */}
       <HeaderTagsPart tagList={itemInfo.tags}></HeaderTagsPart>
-
-      {/* Tags */}
     </FlexDiv>
   );
 }
@@ -149,4 +160,40 @@ function HeaderTagsPart(props: HeaderTagsPartProps) {
   }
 
   return <pre>{JSON.stringify(tagList)}</pre>;
+}
+
+interface ItemDescPartProps {
+  itemInfo: ItemDetailedIn;
+}
+
+function ItemDescPart(props: ItemDescPartProps) {
+  const { itemInfo } = props;
+
+  return (
+    <FlexDiv className="w-full flex-col items-start justify-start gap-1">
+      <Divider></Divider>
+      <p>{itemInfo.description ?? "此物品暂无描述。"}</p>
+    </FlexDiv>
+  );
+}
+
+function ActionBarPart() {
+  return (
+    <FlexDiv className="w-full flex-row items-center justify-between gap-2">
+      <FlexDiv className="w-full flex-row items-center gap-2">
+        <Button
+          style={{ width: "100%" }}
+          type="primary"
+          icon={<AiOutlineShoppingCart size={18}></AiOutlineShoppingCart>}
+        >
+          购买
+        </Button>
+        <Button icon={<AiOutlineHeart size={18}></AiOutlineHeart>}>收藏</Button>
+      </FlexDiv>
+
+      <Button danger icon={<AiOutlineWarning size={18}></AiOutlineWarning>}>
+        举报
+      </Button>
+    </FlexDiv>
+  );
 }

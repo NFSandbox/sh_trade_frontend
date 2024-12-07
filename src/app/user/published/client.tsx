@@ -9,7 +9,16 @@ import { PageSegment } from "@/cus_components/pages";
 import { ContactInfoItem } from "@/cus_components/contact_info";
 import { ItemCard, AdaptiveItemGrid } from "@/cus_components/item";
 
-import { Avatar, Typography, Form, Button, Input, Select, Space } from "antd";
+import {
+  Avatar,
+  Typography,
+  Form,
+  Button,
+  Input,
+  Select,
+  Space,
+  FloatButton,
+} from "antd";
 const { useForm } = Form;
 const { Paragraph } = Typography;
 import {
@@ -18,6 +27,7 @@ import {
   AiOutlineQq,
   AiOutlineWechat,
   AiOutlineDelete,
+  AiOutlinePlusCircle,
 } from "react-icons/ai";
 
 // States
@@ -55,15 +65,15 @@ export function Client() {
   }
 
   return (
-    <FlexDiv className="w-full flex-col items-center justify-start gap-4 pr-4">
-      <Button
-        onClick={() => {
-          setClickable(!clickable);
-        }}
-      >
-        Clickable: {JSON.stringify(clickable)}
-      </Button>
-      <AdaptiveItemGrid itemInfoList={userItems?.data ?? []}></AdaptiveItemGrid>
+    <FlexDiv
+      expand
+      className="w-full flex-col items-center justify-start gap-4 py-4 pr-4"
+    >
+      {/* Published Item List  */}
+      <AdaptiveItemGrid
+        showAddNewItem
+        itemInfoList={userItems?.data ?? []}
+      ></AdaptiveItemGrid>
     </FlexDiv>
   );
 }
