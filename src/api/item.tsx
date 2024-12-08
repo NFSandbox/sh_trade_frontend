@@ -43,6 +43,17 @@ export interface ItemDetailedIn extends ItemIn {
   fav_count: number;
 }
 
+export interface ItemOut {
+  name: string;
+  description: string;
+  price: number;
+  tags: string[];
+}
+
+export interface ItemOutWithId extends ItemOut {
+  item_id: number;
+}
+
 /**
  * Get items of a user by user ID.
  *
@@ -113,4 +124,34 @@ export function useItemDetailedInfo(item_id: string) {
       keepPreviousData: true,
     },
   );
+}
+
+/**
+ * Add a new item to the inventory.
+ *
+ * @param itemData - Object containing item details including name, description, price, and tags.
+ * @returns The created item's data or throws an error if the operation fails.
+ */
+export async function addItem(itemData: ItemOut) {
+  try {
+    const res = await axiosIns.post("/item/add", itemData);
+    return res.data as ItemIn;
+  } catch (e) {
+    apiErrorThrower(e);
+  }
+}
+
+/**
+ * Update an item's details.
+ *
+ * @param updatedData - Object containing the updated details including item_id, name, description, price, and tags.
+ * @returns The updated item's data or throws an error if the operation fails.
+ */
+export async function editItem(updatedData: ItemOutWithId) {
+  try {
+    const res = await axiosIns.post("/item/update", updatedData);
+    return res.data as ItemIn;
+  } catch (e) {
+    apiErrorThrower(e);
+  }
 }

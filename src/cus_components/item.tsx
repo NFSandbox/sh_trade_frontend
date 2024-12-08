@@ -1,18 +1,29 @@
 "use client";
 
 import React, { CSSProperties } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 
 // Components
 import { FlexDiv } from "@/components/container";
-import { Button } from "antd";
+import { Button, Form, Input, InputNumber, Select, Drawer, Upload } from "antd";
 
 // Icons
 import { IoIosMore } from "react-icons/io";
-import { AiOutlineClockCircle, AiOutlinePlusCircle } from "react-icons/ai";
+import {
+  AiOutlineClockCircle,
+  AiOutlinePlusCircle,
+  AiOutlineInbox,
+} from "react-icons/ai";
 
 // Apis
-import { ItemIn, TagIn } from "@/api/item";
+import {
+  ItemDetailedIn,
+  ItemIn,
+  ItemOut,
+  ItemOutWithId,
+  TagIn,
+} from "@/api/item";
 
 // Tools
 import { classNames } from "@/tools/css_tools";
@@ -182,7 +193,7 @@ export function AdaptiveItemGrid(props: AdaptiveItemGridProps) {
         {/* Add New Item Grid Item  */}
         {props.showAddNewItem && (
           <Link
-            href="/user/item/add"
+            href="/user/published/add"
             className={classNames(
               "h-[8rem] w-full place-content-center place-items-center bg-bgcolor/50 dark:bg-bgcolor-dark/50",
               "rounded-xl",
@@ -261,5 +272,106 @@ export function ItemTagsGrid(props: ItemTagsGridProps) {
         return <ItemTag tagInfo={tag}></ItemTag>;
       })}
     </FlexDiv>
+  );
+}
+
+interface ItemEditFormProps {
+  onSubmit: (itemInfo: ItemOut | ItemOutWithId) => any;
+  initValue?: ItemDetailedIn;
+}
+
+export function ItemEditForm(props: ItemEditFormProps) {
+  const { onSubmit, initValue } = props;
+
+  // Submit handler
+  const handleSubmit = (values: any) => {
+    const { name, description, price, tags } = values;
+    const itemData: ItemOutWithId = {
+      item_id: initValue?.item_id || 0, // Assuming if it's an update, we have item_id
+      name,
+      description,
+      price,
+      tags,
+    };
+    onSubmit(itemData);
+  };
+
+  return (
+    <Form
+      style={{ width: "100%" }}
+      onFinish={handleSubmit}
+      labelCol={{ span: 6 }}
+      wrapperCol={{ span: 16 }}
+      initialValues={{
+        name: initValue?.name || "",
+        description: initValue?.description || "",
+        price: initValue?.price || 0,
+        tags: initValue?.tag_name_list || [],
+      }}
+    >
+      {/* Item Name */}
+      <Form.Item
+        label="物品名称"
+        name="name"
+        rules={[{ required: true, message: "请输入物品名称!" }]}
+      >
+        <Input />
+      </Form.Item>
+
+      {/* Item Description */}
+      <Form.Item
+        label="物品描述"
+        name="description"
+        rules={[{ required: true, message: "请输入物品描述!" }]}
+      >
+        <Input.TextArea rows={4} />
+      </Form.Item>
+
+      {/* Item Price */}
+      <Form.Item
+        label="价格"
+        name="price"
+        rules={[
+          { required: true, message: "请输入价格!" },
+          { type: "number", min: 0, message: "价格必须为正数!" },
+        ]}
+      >
+        <InputNumber min={0} step={0.01} style={{ width: "100%" }} />
+      </Form.Item>
+
+      {/* Item Tags */}
+      <Form.Item
+        label="标签"
+        name="tags"
+        rules={[{ required: true, message: "请至少选择一个标签!" }]}
+      >
+        <Select
+          mode="tags"
+          placeholder="按 Enter 键添加标签"
+          style={{ width: "100%" }}
+        ></Select>
+      </Form.Item>
+
+      <Form.Item label="物品图片">
+        <Upload.Dragger {...props}>
+          <div className="ant-upload-drag-icon w-full place-items-center justify-items-center">
+            <AiOutlineInbox size={50} className="opacity-70" />
+          </div>
+          <p className="ant-upload-text">
+            点击 或者 拖拽文件到此处 来上传物品图片
+          </p>
+          <p className="ant-upload-hint">
+            请务必确保上传的物品图片符合网站规范
+          </p>
+        </Upload.Dragger>
+      </Form.Item>
+
+      {/* Submit Button */}
+      <Form.Item wrapperCol={{ offset: 6, span: 16 }}>
+        <Button type="primary" htmlType="submit" block>
+          完成
+        </Button>
+      </Form.Item>
+    </Form>
   );
 }
