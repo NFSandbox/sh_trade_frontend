@@ -6,7 +6,16 @@ import Link from "next/link";
 
 // Components
 import { FlexDiv } from "@/components/container";
-import { Button, Form, Input, InputNumber, Select, Drawer, Upload } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  InputNumber,
+  Select,
+  Drawer,
+  Upload,
+  Dropdown,
+} from "antd";
 
 // Icons
 import { IoIosMore } from "react-icons/io";
@@ -14,6 +23,8 @@ import {
   AiOutlineClockCircle,
   AiOutlinePlusCircle,
   AiOutlineInbox,
+  AiOutlineEdit,
+  AiOutlineDelete,
 } from "react-icons/ai";
 
 // Apis
@@ -108,9 +119,37 @@ export function ItemCard(props: ItemCardProps) {
 
           {/* More Button  */}
           <div>
-            <Button size="small" type="text">
+            <Dropdown
+              menu={{
+                items: [
+                  {
+                    key: "1",
+                    icon: <AiOutlineEdit size={20}></AiOutlineEdit>,
+                    label: (
+                      <Link
+                        href={`/user/published/add?item_id=${itemInfo.item_id}`}
+                      >
+                        编辑物品
+                      </Link>
+                    ),
+                  },
+                  {
+                    key: "2",
+                    danger: true,
+                    icon: <AiOutlineDelete size={20}></AiOutlineDelete>,
+                    label: (
+                      <Link
+                        href={`/user/published/add?item_id=${itemInfo.item_id}`}
+                      >
+                        删除
+                      </Link>
+                    ),
+                  },
+                ],
+              }}
+            >
               <IoIosMore size={20}></IoIosMore>
-            </Button>
+            </Dropdown>
           </div>
         </FlexDiv>
 
@@ -255,7 +294,7 @@ export function ItemTag(props: ItemTagProps) {
     <p
       className={classNames(
         "px-2",
-        "rounded-lg bg-primary/70 text-white font-mono text-sm",
+        "rounded-lg bg-primary/70 font-mono text-sm text-white",
       )}
     >
       {props.tagInfo.name}
