@@ -252,7 +252,12 @@ export function ItemTag(props: ItemTagProps) {
   return (
     // TODO
     // More detailed info
-    <p className={classNames("px-2 py-1", "rounded-lg")}>
+    <p
+      className={classNames(
+        "px-2",
+        "rounded-lg bg-primary/70 text-white font-mono text-sm",
+      )}
+    >
       {props.tagInfo.name}
     </p>
   );
@@ -276,10 +281,15 @@ export function ItemTagsGrid(props: ItemTagsGridProps) {
 }
 
 interface ItemEditFormProps {
-  onSubmit: (itemInfo: ItemOut | ItemOutWithId) => any;
+  onSubmit: (itemInfo: ItemOutWithId) => any;
   initValue?: ItemDetailedIn;
 }
 
+/**
+ * A React component to show a form to edit item info.
+ *
+ * Returned item id will be -1 if `item_id` is not specified in initValue.
+ */
 export function ItemEditForm(props: ItemEditFormProps) {
   const { onSubmit, initValue } = props;
 
@@ -287,7 +297,7 @@ export function ItemEditForm(props: ItemEditFormProps) {
   const handleSubmit = (values: any) => {
     const { name, description, price, tags } = values;
     const itemData: ItemOutWithId = {
-      item_id: initValue?.item_id || 0, // Assuming if it's an update, we have item_id
+      item_id: initValue?.item_id || -1, // Assuming if it's an update, we have item_id
       name,
       description,
       price,

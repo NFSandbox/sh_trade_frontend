@@ -7,6 +7,7 @@ import { FlexDiv, Center } from "@/components/container";
 import { Title } from "@/components/title";
 import { Button, Input } from "antd";
 import { CusUserBar } from "@/cus_components/user";
+import { ItemTagsGrid } from "@/cus_components/item";
 import { ErrorCard, LoadingPage } from "@/components/error";
 import {
   AiOutlineTag,
@@ -159,7 +160,7 @@ function HeaderTagsPart(props: HeaderTagsPartProps) {
     );
   }
 
-  return <pre>{JSON.stringify(tagList)}</pre>;
+  return <ItemTagsGrid tags={tagList}></ItemTagsGrid>;
 }
 
 interface ItemDescPartProps {

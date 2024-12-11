@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, useLayoutEffect, CSSProperties } from "react";
+import { useSearchParams } from "next/navigation";
 
 // Components
 import { FlexDiv, Center } from "@/components/container";
@@ -53,15 +54,59 @@ import {
   ContactInfoIn,
   ContactInfoOutNew,
 } from "@/api/user";
-import { useUserItems } from "@/api/item";
+import {
+  useUserItems,
+  useItemDetailedInfo,
+  ItemOut,
+  ItemOutWithId,
+  addItem,
+  editItem,
+} from "@/api/item";
 
 export function Client() {
-  const { data: userItems, isLoading } = useUserItems();
+  const params = useSearchParams();
+  const itemIdParam = params.get("item_id");
 
-  const [clickable, setClickable] = useState(false);
+  const { data: userItems, isLoading } = useUserItems();
+  const { isLoading: itemDetailIsLoading, data: itemDetail } =
+    useItemDetailedInfo(itemIdParam);
+
+  if (userItems === undefined) {
+    return <LoadingPage></LoadingPage>;
+  }
 
   if (isLoading) {
     return <LoadingPage></LoadingPage>;
+  }
+
+  if (itemIdParam !== null && itemDetailIsLoading) {
+    return <LoadingPage></LoadingPage>;
+  }
+
+  let titleText = "发布新物品";
+  if (itemIdParam !== null) {
+    titleText = "编辑物品";
+  }
+
+  /**
+   * Handle submit of ItemEditForm, either add new item or update an item
+   *
+   * Determine operation type (add/edit) based on if the item_id==-1
+   */
+  async function handleSubmit(info: ItemOutWithId) {
+    try {
+      if (info.item_id !== -1) {
+        // Update existing item
+        const res = await editItem(info);
+        toast.success("物品信息更新成功");
+      } else {
+        // Add new item
+        const res = await addItem(info);
+        toast.success("物品发布成功");
+      }
+    } catch (e) {
+      errorPopper(e);
+    }
   }
 
   return (
@@ -71,10 +116,14 @@ export function Client() {
       className="w-full flex-col items-center justify-start gap-4 py-4 pr-4"
     >
       {/* Title Part  */}
-      <Title>发布新物品</Title>
+      <Title>{titleText}</Title>
 
       {/* Forms */}
-      <ItemEditForm onSubmit={(v)=>console.log(v)}></ItemEditForm>
+      <ItemEditForm
+        onSubmit={handleSubmit}
+        // pass init value if exists
+        initValue={itemIdParam ? itemDetail : undefined}
+      ></ItemEditForm>
     </FlexDiv>
   );
 }

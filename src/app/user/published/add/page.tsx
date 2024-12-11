@@ -10,7 +10,7 @@ import { Center } from "@/components/container";
 import * as clients from "./client";
 
 export const metadata: Metadata = {
-  title: `发布新物品 - ${gene_config.appName}`,
+  title: `物品编辑页 - ${gene_config.appName}`,
   description: `${gene_config.appDesc}`,
 };
 

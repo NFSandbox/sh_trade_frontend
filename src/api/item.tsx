@@ -116,7 +116,7 @@ export async function getItemDetailedInfo(item_id: string) {
 /**
  * SWR hook for getItemDetailedInfo
  */
-export function useItemDetailedInfo(item_id: string) {
+export function useItemDetailedInfo(item_id: string | null) {
   return useSWR(
     ["/item/detailed", item_id],
     () => getItemDetailedInfo(item_id as string), // Fetcher function
