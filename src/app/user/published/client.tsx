@@ -69,10 +69,30 @@ export function Client() {
       expand
       className="w-full flex-col items-center justify-start gap-4 py-4 pr-4"
     >
+      <Title>已发布</Title>
+
       {/* Published Item List  */}
       <AdaptiveItemGrid
         showAddNewItem
-        itemInfoList={userItems?.data ?? []}
+        itemInfoList={
+          userItems?.data.filter(function (item) {
+            return item.state === "valid";
+          }) ?? []
+        }
+      ></AdaptiveItemGrid>
+
+      <div className="pt-8">
+        <Title>已售出</Title>
+      </div>
+
+      {/* Published Item List  */}
+      <AdaptiveItemGrid
+        showAddNewItem={false}
+        itemInfoList={
+          userItems?.data.filter(function (item) {
+            return item.state === "sold";
+          }) ?? []
+        }
       ></AdaptiveItemGrid>
     </FlexDiv>
   );

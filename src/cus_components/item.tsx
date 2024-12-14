@@ -45,6 +45,7 @@ import { errorPopper } from "@/exceptions/error";
 import toast from "react-hot-toast";
 
 import * as dayjs from "dayjs";
+import { ErrorCard } from "@/components/error";
 
 interface ItemCardProps {
   itemInfo: ItemIn;
@@ -106,7 +107,7 @@ export function ItemCard(props: ItemCardProps) {
         "mark-item-flex-box",
         widthTw,
         // Spacing
-        "flex-col items-start justify-start text-start",
+        "flex-col flex-none items-start justify-start text-start",
         // Rounded
         "rounded-2xl",
         // Hover effect when clickable
@@ -236,8 +237,16 @@ export function AdaptiveItemGrid(props: AdaptiveItemGridProps) {
 
   const { itemInfoList } = props;
 
+  if (itemInfoList.length === 0) {
+    return (
+      <FlexDiv className="py-4 w-full flex-none">
+        <ErrorCard title="无数据" description="暂无满足条件的物品"></ErrorCard>
+      </FlexDiv>
+    );
+  }
+
   return (
-    <FlexDiv className="w-full flex-col items-center justify-start">
+    <FlexDiv className="w-full flex-none flex-col items-center justify-start">
       <FlexDiv style={autoItemGridCss} className={classNames()}>
         {itemInfoList.map(function (itemInfo) {
           return (

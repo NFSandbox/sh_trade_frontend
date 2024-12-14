@@ -102,6 +102,11 @@ const items: MenuItem[] = [
     label: "已发布",
   },
   {
+    key: "href:transaction",
+    icon: <AiOutlineInbox size={20} />,
+    label: "交易信息",
+  },
+  {
     danger: true,
     key: "href:/auth/signout",
     icon: <PiSignOut size={20} />,
