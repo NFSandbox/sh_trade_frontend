@@ -14,6 +14,7 @@ import {
   AiOutlineShoppingCart,
   AiOutlineHeart,
   AiFillHeart,
+  AiOutlineEdit,
   AiOutlineWarning,
 } from "react-icons/ai";
 import { Divider } from "antd";
@@ -25,7 +26,7 @@ import { useStore } from "@/tools/use_store";
 
 // Api
 import { useItemDetailedInfo, ItemDetailedIn, ItemIn, TagIn } from "@/api/item";
-import { UserIn } from "@/api/auth";
+import { useGetMe, UserIn } from "@/api/auth";
 
 // Tools
 import { classNames } from "@/tools/css_tools";
@@ -35,6 +36,7 @@ import * as dayjs from "dayjs";
 export function Client() {
   const params = useSearchParams();
   const itemId = params.get("item_id");
+  const setTitle = useHeaderTitle("物品详情");
 
   // Invalid Item ID
   if (itemId === null || itemId === undefined) {
@@ -53,8 +55,23 @@ export function Client() {
     return <LoadingPage></LoadingPage>;
   }
 
-  if (error) {
+  if (error || data === undefined) {
+    if (error.name == "permission_required") {
+      return (
+        <ErrorCard
+        
+          title="未登录账号"
+          description="登录AHUER.COM账号以查看详细物品信息"
+        ></ErrorCard>
+      );
+    }
     errorPopper(error);
+    return (
+      <ErrorCard
+        title="无法获取物品信息"
+        description={JSON.stringify(error)}
+      ></ErrorCard>
+    );
   }
 
   // Not loading, not error, then data must be valid after this point
@@ -85,7 +102,7 @@ export function Client() {
         <ItemDescPart itemInfo={data}></ItemDescPart>
 
         {/* Action Bar  */}
-        <ActionBarPart></ActionBarPart>
+        <ActionBarPart itemInfo={data}></ActionBarPart>
       </FlexDiv>
     </FlexDiv>
   );
@@ -178,7 +195,16 @@ function ItemDescPart(props: ItemDescPartProps) {
   );
 }
 
-function ActionBarPart() {
+interface ActionBarPartProps {
+  itemInfo: ItemDetailedIn;
+}
+
+function ActionBarPart(props: ActionBarPartProps) {
+  const { data: userData } = useGetMe();
+  const itemData = props.itemInfo;
+
+  const isSeller = userData?.user_id === itemData.seller.user_id;
+
   return (
     <FlexDiv className="w-full flex-row items-center justify-between gap-2">
       <FlexDiv className="w-full flex-row items-center gap-2">
@@ -189,9 +215,10 @@ function ActionBarPart() {
         >
           购买
         </Button>
-        <Button icon={<AiOutlineHeart size={18}></AiOutlineHeart>}>收藏</Button>
       </FlexDiv>
 
+      <Button icon={<AiOutlineHeart size={18}></AiOutlineHeart>}>收藏</Button>
+      <Button icon={<AiOutlineEdit size={18}></AiOutlineEdit>}>编辑</Button>
       <Button danger icon={<AiOutlineWarning size={18}></AiOutlineWarning>}>
         举报
       </Button>

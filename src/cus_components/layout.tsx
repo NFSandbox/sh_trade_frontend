@@ -10,6 +10,7 @@ import Session from "supertokens-web-js/recipe/session";
 import EmailPassword from "supertokens-web-js/recipe/emailpassword";
 
 // Components
+import Image from "next/image";
 import { Header } from "@/components/header";
 import { Container, FlexDiv } from "@/components/container";
 import { Divider, Popover, Avatar, Button, ButtonProps } from "antd";
@@ -82,7 +83,7 @@ function CusHeader() {
             )}
           >
             {/* Icon */}
-            <img
+            <Image
               src="/assets/icon.svg"
               alt="Site Icon"
               width={40}
@@ -172,10 +173,13 @@ function UserAvatar() {
       </p>
 
       <FlexDiv className="flex-none flex-col pt-2">
-        <HoverMenuButton href="/user" icon={<AiOutlineUser size={20} />}>
+        <HoverMenuButton href="/user/profile" icon={<AiOutlineUser size={20} />}>
           个人资料
         </HoverMenuButton>
-        <HoverMenuButton href="/published" icon={<AiOutlineInbox size={20} />}>
+        <HoverMenuButton
+          href="/user/published"
+          icon={<AiOutlineInbox size={20} />}
+        >
           我的发布
         </HoverMenuButton>
         <HoverMenuButton

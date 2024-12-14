@@ -1,6 +1,12 @@
 "use client";
 
-import { Children, useEffect, useState, useLayoutEffect } from "react";
+import {
+  Children,
+  useEffect,
+  useState,
+  useLayoutEffect,
+  Suspense,
+} from "react";
 import { useRouter } from "next/navigation";
 
 // Components
@@ -16,6 +22,7 @@ import { useLayoutState, useHeaderTitle } from "@/states/layoutState";
 
 // Apis
 import { useGetMeForce } from "@/api/auth";
+import { LoadingPage } from "@/components/error";
 
 const userBasePath = "/user";
 
@@ -73,7 +80,9 @@ export default function UserProfileLayOut(props: UserProfileLayOutProps) {
       {/* Here, we must set justify-start for this children wrapper. So that when children are not high enough to trigger scrolling */}
       {/* The content will be put at the top of the page, instead of being centered (which is not the normal case) */}
       <FlexDiv className="profile-layout-children-root h-full w-full max-w-[50rem] flex-col items-center justify-start overflow-y-auto">
-        {props.children}
+        <Suspense fallback={<LoadingPage></LoadingPage>}>
+          {props.children}
+        </Suspense>
       </FlexDiv>
     </FlexDiv>
   );

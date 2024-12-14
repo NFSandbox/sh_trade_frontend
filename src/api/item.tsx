@@ -25,6 +25,8 @@ export interface TagIn {
   name: string;
 }
 
+type ItemStateLiteral = "valid" | "sold" | "hidden";
+
 export interface ItemIn {
   item_id: number;
   user_id: number;
@@ -32,8 +34,7 @@ export interface ItemIn {
   description: string;
   price: number;
   created_time: number;
-  sold: boolean;
-  hidden: boolean;
+  state: ItemStateLiteral;
   tags: TagIn[];
   tag_name_list: string[];
 }
@@ -151,6 +152,25 @@ export async function editItem(updatedData: ItemOutWithId) {
   try {
     const res = await axiosIns.post("/item/update", updatedData);
     return res.data as ItemIn;
+  } catch (e) {
+    apiErrorThrower(e);
+  }
+}
+
+/**
+ * Remove a list of items by their IDs.
+ *
+ * @param itemIdList - An array of item ID numbers to remove.
+ * @returns The server's response data indicating success or throws an error if the operation fails.
+ */
+export async function removeItems(itemIdList: number[]) {
+  try {
+    const res = await axiosIns.delete("/item/remove", { data: itemIdList });
+    return res.data as {
+      success: boolean;
+      operation: string;
+      total: number;
+    }[];
   } catch (e) {
     apiErrorThrower(e);
   }

@@ -15,6 +15,7 @@ import {
   Drawer,
   Upload,
   Dropdown,
+  Radio,
 } from "antd";
 
 // Icons
@@ -34,11 +35,14 @@ import {
   ItemOut,
   ItemOutWithId,
   TagIn,
+  removeItems,
 } from "@/api/item";
 
 // Tools
 import { classNames } from "@/tools/css_tools";
 import { setDefault } from "@/tools/set_default";
+import { errorPopper } from "@/exceptions/error";
+import toast from "react-hot-toast";
 
 import * as dayjs from "dayjs";
 
@@ -57,6 +61,11 @@ interface ItemCardProps {
    * If this item card is clickable.
    */
   clickable?: boolean;
+
+  /**
+   * Show mark on item card image if sold
+   */
+  soldImgMark?: boolean;
 }
 
 /**
@@ -66,9 +75,12 @@ export function ItemCard(props: ItemCardProps) {
   const fixedWidthTw = "flex-none w-[15rem]";
   const dynamicWidthTw = "flex-auto w-full";
 
-  let { itemInfo, fixedWidth, clickable } = props;
+  let { itemInfo, fixedWidth, clickable, soldImgMark } = props;
   fixedWidth = setDefault(fixedWidth, true);
   clickable = setDefault(clickable, true);
+  soldImgMark = setDefault(soldImgMark, true);
+
+  const shouldShowSoldMark = () => soldImgMark && itemInfo.state === "sold";
 
   // Final width tailwind to use
   const widthTw = fixedWidth === true ? fixedWidthTw : dynamicWidthTw;
@@ -77,6 +89,16 @@ export function ItemCard(props: ItemCardProps) {
   const pubTimeDayJs = (dayjs as any)(itemInfo.created_time);
   const pubTimeStr = pubTimeDayJs.format("M/DD");
   const pubTimeToNowDiffDays = 0 - pubTimeDayJs.diff((dayjs as any)(), "day");
+
+  // Handle Item Removal
+  async function handleItemRemove() {
+    try {
+      await removeItems([itemInfo.item_id]);
+      toast.success("商品已删除，请刷新页面");
+    } catch (e) {
+      errorPopper(e);
+    }
+  }
 
   let content = (
     <FlexDiv
@@ -96,7 +118,7 @@ export function ItemCard(props: ItemCardProps) {
       )}
     >
       {/* Picture Part */}
-      <ItemCardPicture></ItemCardPicture>
+      <ItemCardPicture soldMark={shouldShowSoldMark()}></ItemCardPicture>
 
       {/* Text Content Part */}
       <FlexDiv className="w-full flex-col px-1 py-2">
@@ -123,7 +145,7 @@ export function ItemCard(props: ItemCardProps) {
               menu={{
                 items: [
                   {
-                    key: "1",
+                    key: "edit_item",
                     icon: <AiOutlineEdit size={20}></AiOutlineEdit>,
                     label: (
                       <Link
@@ -134,16 +156,14 @@ export function ItemCard(props: ItemCardProps) {
                     ),
                   },
                   {
-                    key: "2",
+                    key: "remove_item",
                     danger: true,
+                    onClick: function (info) {
+                      info.domEvent.stopPropagation();
+                      handleItemRemove();
+                    },
                     icon: <AiOutlineDelete size={20}></AiOutlineDelete>,
-                    label: (
-                      <Link
-                        href={`/user/published/add?item_id=${itemInfo.item_id}`}
-                      >
-                        删除
-                      </Link>
-                    ),
+                    label: "删除",
                   },
                 ],
               }}
@@ -252,6 +272,11 @@ export function AdaptiveItemGrid(props: AdaptiveItemGridProps) {
 
 interface ItemCardPictureProps {
   imgId?: string;
+
+  /**
+   * Show a sold mark
+   */
+  soldMark?: boolean;
 }
 
 /**
@@ -266,16 +291,21 @@ interface ItemCardPictureProps {
  * while keeping a certain ratio.
  */
 function ItemCardPicture(props: ItemCardPictureProps) {
-  const { imgId } = props;
+  let { imgId, soldMark } = props;
+  soldMark = setDefault(soldMark, false);
 
   return (
     <div
       className={classNames(
-        "h-[8rem] w-full place-content-center place-items-center bg-primary/50",
+        "h-[8rem] w-full place-content-center place-items-center",
+        soldMark ? "bg-black/30" : "bg-primary/50",
         "rounded-xl",
       )}
     >
-      <p className="font-mono font-bold text-white">Image Placeholder</p>
+      <p className="font-mono font-bold text-white">
+        Image Placeholder
+        {soldMark && "(Sold)"}
+      </p>
     </div>
   );
 }
@@ -335,15 +365,18 @@ export function ItemEditForm(props: ItemEditFormProps) {
   // Submit handler
   const handleSubmit = (values: any) => {
     const { name, description, price, tags } = values;
-    const itemData: ItemOutWithId = {
+    const itemData: ItemOutWithId & { state: "valid" | "sold" | "hidden" } = {
       item_id: initValue?.item_id || -1, // Assuming if it's an update, we have item_id
       name,
       description,
       price,
       tags,
+      state: values.state,
     };
     onSubmit(itemData);
   };
+
+  const itemState = props.initValue?.state ?? "valid";
 
   return (
     <Form
@@ -356,6 +389,7 @@ export function ItemEditForm(props: ItemEditFormProps) {
         description: initValue?.description || "",
         price: initValue?.price || 0,
         tags: initValue?.tag_name_list || [],
+        state: itemState ?? "valid",
       }}
     >
       {/* Item Name */}
@@ -365,6 +399,18 @@ export function ItemEditForm(props: ItemEditFormProps) {
         rules={[{ required: true, message: "请输入物品名称!" }]}
       >
         <Input />
+      </Form.Item>
+
+      <Form.Item label="物品状态" name="state">
+        <Radio.Group
+          options={[
+            { label: "公开", value: "valid" },
+            { label: "隐藏", value: "hidden" },
+            { label: "已售出", value: "sold" },
+          ]}
+          optionType="button"
+          buttonStyle="solid"
+        />
       </Form.Item>
 
       {/* Item Description */}

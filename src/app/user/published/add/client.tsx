@@ -2,6 +2,8 @@
 import { useEffect, useState, useLayoutEffect, CSSProperties } from "react";
 import { useSearchParams } from "next/navigation";
 
+import { useRouter } from "next/navigation";
+
 // Components
 import { FlexDiv, Center } from "@/components/container";
 import { LoadingPage, LoadingSkeleton } from "@/components/error";
@@ -40,7 +42,7 @@ import { useTriggerState } from "@/tools/use_trigger_state";
 // Tools
 import { classNames } from "@/tools/css_tools";
 import { asyncSleep, useAsyncTaskWithLoadingState } from "@/tools/general";
-import { errorPopper } from "@/exceptions/error";
+import { errorPopper, errorStringifier } from "@/exceptions/error";
 import { useMinBreakPoint } from "@/tools/use_breakpoints";
 import toast from "react-hot-toast";
 
@@ -66,6 +68,7 @@ import {
 export function Client() {
   const params = useSearchParams();
   const itemIdParam = params.get("item_id");
+  const router = useRouter();
 
   const { data: userItems, isLoading } = useUserItems();
   const { isLoading: itemDetailIsLoading, data: itemDetail } =
@@ -103,6 +106,11 @@ export function Client() {
         // Add new item
         const res = await addItem(info);
         toast.success("物品发布成功");
+      }
+      try {
+        router.back();
+      } catch (e) {
+        console.log(errorStringifier(e));
       }
     } catch (e) {
       errorPopper(e);
