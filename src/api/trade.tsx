@@ -2,6 +2,10 @@ import useSWR from "swr";
 import { axiosIns } from "./axios";
 import { apiErrorThrower } from "@/exceptions/error";
 
+// Interfaces
+import { UserIn } from "./auth";
+import { ItemIn } from "./item";
+
 /** Trade Record Output Interface */
 export interface TradeRecordOut {
   trade_id: number;
@@ -11,6 +15,19 @@ export interface TradeRecordOut {
   state: string;
   created_time: number;
   updated_time: number;
+}
+
+/** Trade Record Output Interface */
+export interface TradeRecordIn {
+  trade_id: number;
+  buyer: UserIn;
+  item: ItemIn;
+  created_time: number;
+  accepted_time: number;
+  confirmed_time: number;
+  completed_time: number;
+  state: "pending" | "processsing" | "confirmed" | "completed" | "cancelled";
+  cancel_reason?: "buyer_cancelled" | "seller_cancelled" | "seller_rejected";
 }
 
 /** Trades Filter Type Interface */
@@ -94,7 +111,7 @@ export async function confirmTransaction(trade_id: number) {
  */
 export async function getTransactions(filter?: string[]) {
   try {
-    const res = await axiosIns.get<TradeRecordOut[]>("/trade/get", {
+    const res = await axiosIns.get<TradeRecordIn[]>("/trade/get", {
       params: { filter },
     });
     return res.data;

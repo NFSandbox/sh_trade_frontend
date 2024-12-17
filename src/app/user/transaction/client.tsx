@@ -1,5 +1,6 @@
 "use client";
 import { useEffect, useState, useLayoutEffect, CSSProperties } from "react";
+import * as dayjs from "dayjs";
 
 // Components
 import { FlexDiv, Center } from "@/components/container";
@@ -46,7 +47,7 @@ import { useMinBreakPoint } from "@/tools/use_breakpoints";
 import toast from "react-hot-toast";
 
 // Apis
-import { useGetMeForce } from "@/api/auth";
+import { useGetMe, useGetMeForce } from "@/api/auth";
 import {
   updateUserDescription,
   useContactInfo,
@@ -62,6 +63,8 @@ import {
   acceptTransaction,
   cancelTransaction,
   confirmTransaction,
+  TradeRecordIn,
+  TradeRecordOut,
 } from "@/api/trade";
 
 export function Client() {
@@ -94,6 +97,8 @@ function TransactionTable() {
   const [type, setType] = useState<FilterOptions["type"]>("active");
   const { data: transactions, mutate } = useTradeRecords([type]);
 
+  const { data: myInfo } = useGetMeForce();
+
   const handleAccept = async (trade_id: number) => {
     await acceptTransaction(trade_id);
     mutate();
@@ -110,7 +115,7 @@ function TransactionTable() {
   };
 
   // Define table columns
-  const columns: ColumnsType<any> = [
+  const columns: ColumnsType<TradeRecordIn> = [
     {
       title: "交易ID",
       dataIndex: "trade_id",
@@ -130,20 +135,23 @@ function TransactionTable() {
       title: "创建时间",
       dataIndex: "created_time",
       key: "created_time",
-      render: (timestamp) => new Date(timestamp).toLocaleString(),
+      render: (timestamp) =>
+        (dayjs as any)(timestamp).format("YYYY-MM-DD HH:mm:ss"),
     },
     {
       title: "更新时间",
       dataIndex: "updated_time",
       key: "updated_time",
-      render: (timestamp) => new Date(timestamp).toLocaleString(),
+      render: (timestamp) =>
+        (dayjs as any)(timestamp).format("YYYY-MM-DD HH:mm:ss"),
     },
     {
       title: "操作",
       key: "actions",
+      dataIndex: "item",
       render: (_, record) => (
         <Space>
-          {role === "seller" && type === "pending" && (
+          {role === "seller" && record.state === "pending" && (
             <>
               <Button
                 type="primary"
@@ -156,7 +164,7 @@ function TransactionTable() {
               </Button>
             </>
           )}
-          {role === "buyer" && type === "active" && (
+          {role === "buyer" && record.state === "processsing" && (
             <Button
               type="primary"
               onClick={() => handleConfirm(record.trade_id)}
@@ -204,9 +212,15 @@ function TransactionTable() {
       {/* Transactions Table */}
       <Table
         columns={columns}
-        dataSource={transactions?.filter((tx) =>
-          role === "buyer" ? tx.buyer_id : tx.seller_id,
-        )}
+        dataSource={transactions?.filter(function (tx) {
+          console.log(`Transaction: ${JSON.stringify(tx)}`);
+          console.log(`My ID: ${myInfo?.user_id}`);
+          if (role === "buyer") {
+            return tx.buyer.user_id === myInfo?.user_id;
+          } else {
+            return tx.buyer.user_id !== myInfo?.user_id;
+          }
+        })}
         rowKey="trade_id"
         pagination={{
           pageSize: 10,

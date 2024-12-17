@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 // Components
 import { FlexDiv, Center } from "@/components/container";
 import { Title } from "@/components/title";
-import { Button, Input } from "antd";
+import { Button, Input, Tooltip } from "antd";
 import { CusUserBar } from "@/cus_components/user";
 import { ItemTagsGrid } from "@/cus_components/item";
 import { ErrorCard, LoadingPage } from "@/components/error";
@@ -27,11 +27,13 @@ import { useStore } from "@/tools/use_store";
 // Api
 import { useItemDetailedInfo, ItemDetailedIn, ItemIn, TagIn } from "@/api/item";
 import { useGetMe, UserIn } from "@/api/auth";
+import { startTransaction } from "@/api/trade";
 
 // Tools
 import { classNames } from "@/tools/css_tools";
 import { errorPopper } from "@/exceptions/error";
 import * as dayjs from "dayjs";
+import { promiseToastWithBaseErrorHandling } from "@/tools/general";
 
 export function Client() {
   const params = useSearchParams();
@@ -59,7 +61,6 @@ export function Client() {
     if (error.name == "permission_required") {
       return (
         <ErrorCard
-        
           title="未登录账号"
           description="登录AHUER.COM账号以查看详细物品信息"
         ></ErrorCard>
@@ -205,20 +206,41 @@ function ActionBarPart(props: ActionBarPartProps) {
 
   const isSeller = userData?.user_id === itemData.seller.user_id;
 
+  async function handleStartTransaction() {
+    await promiseToastWithBaseErrorHandling(
+      startTransaction(itemData.item_id),
+      "发起请求中...",
+      "购买请求已发出",
+    );
+  }
+
   return (
     <FlexDiv className="w-full flex-row items-center justify-between gap-2">
       <FlexDiv className="w-full flex-row items-center gap-2">
-        <Button
-          style={{ width: "100%" }}
-          type="primary"
-          icon={<AiOutlineShoppingCart size={18}></AiOutlineShoppingCart>}
+        <Tooltip
+          title={isSeller ? "此物品由您发布，无法购买" : "向卖家发起购买请求"}
         >
-          购买
-        </Button>
+          <Button
+            style={{ width: "100%" }}
+            type="primary"
+            disabled={isSeller}
+            icon={<AiOutlineShoppingCart size={18}></AiOutlineShoppingCart>}
+            onClick={handleStartTransaction}
+          >
+            {isSeller ? "购买" : "购买"}
+          </Button>
+        </Tooltip>
       </FlexDiv>
 
       <Button icon={<AiOutlineHeart size={18}></AiOutlineHeart>}>收藏</Button>
-      <Button icon={<AiOutlineEdit size={18}></AiOutlineEdit>}>编辑</Button>
+      {isSeller && (
+        <Button
+          href={`/user/published/add?item_id=${itemData.item_id}`}
+          icon={<AiOutlineEdit size={18}></AiOutlineEdit>}
+        >
+          编辑
+        </Button>
+      )}
       <Button danger icon={<AiOutlineWarning size={18}></AiOutlineWarning>}>
         举报
       </Button>
