@@ -32,6 +32,7 @@ import {
   AiOutlineDelete,
   AiOutlinePlusCircle,
 } from "react-icons/ai";
+import { TransactionStateTag } from "@/cus_components/tag";
 
 // States
 import { useLayoutState, useHeaderTitle } from "@/states/layoutState";
@@ -89,7 +90,7 @@ import type { ColumnsType } from "antd/es/table";
 
 interface FilterOptions {
   role: "buyer" | "seller";
-  type: "active" | "completed" | "pending";
+  type: "active" | "success" | "pending";
 }
 
 function TransactionTable() {
@@ -120,16 +121,26 @@ function TransactionTable() {
       title: "交易ID",
       dataIndex: "trade_id",
       key: "trade_id",
+      render: (_) => <p className="font-mono">{_}</p>,
     },
     {
       title: "物品ID",
-      dataIndex: "item_id",
+      dataIndex: "item.item_id",
       key: "item_id",
+      render: (_, rec) => <p className="font-mono">{rec.item.item_id}</p>,
     },
     {
       title: "状态",
       dataIndex: "state",
+      align: "center",
       key: "state",
+      render: (value, record) => {
+        return (
+          <FlexDiv className="w-full items-center justify-center">
+            <TransactionStateTag state={record.state}></TransactionStateTag>
+          </FlexDiv>
+        );
+      },
     },
     {
       title: "创建时间",
@@ -164,7 +175,7 @@ function TransactionTable() {
               </Button>
             </>
           )}
-          {role === "buyer" && record.state === "processsing" && (
+          {role === "buyer" && record.state === "processing" && (
             <Button
               type="primary"
               onClick={() => handleConfirm(record.trade_id)}
@@ -201,7 +212,7 @@ function TransactionTable() {
             onChange={(e) => setType(e.target.value)}
             options={[
               { label: "进行中", value: "active" },
-              { label: "已完成", value: "completed" },
+              { label: "已完成", value: "success" },
               { label: "待处理", value: "pending" },
             ]}
             optionType="button"
@@ -213,13 +224,24 @@ function TransactionTable() {
       <Table
         columns={columns}
         dataSource={transactions?.filter(function (tx) {
-          console.log(`Transaction: ${JSON.stringify(tx)}`);
-          console.log(`My ID: ${myInfo?.user_id}`);
+          let roleFilterRes: boolean = false;
+          let typeFilterRes: boolean = false;
+
           if (role === "buyer") {
-            return tx.buyer.user_id === myInfo?.user_id;
+            roleFilterRes = tx.buyer.user_id === myInfo?.user_id;
           } else {
-            return tx.buyer.user_id !== myInfo?.user_id;
+            roleFilterRes = tx.buyer.user_id !== myInfo?.user_id;
           }
+
+          if (type === "pending") {
+            typeFilterRes = tx.state === "pending";
+          } else if (type === "active") {
+            typeFilterRes = tx.state === "pending" || tx.state === "processing";
+          } else {
+            typeFilterRes = tx.state === "success";
+          }
+
+          return roleFilterRes && typeFilterRes;
         })}
         rowKey="trade_id"
         pagination={{

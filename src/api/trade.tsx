@@ -17,6 +17,19 @@ export interface TradeRecordOut {
   updated_time: number;
 }
 
+export type TransactionState =
+  | "pending"
+  | "processing"
+  | "success"
+  | "cancelled";
+
+export type TransactionCancelReason =
+  | "seller_rejected"
+  | "seller_accept_timeout"
+  | "cancelled_by_buyer"
+  | "cancelled_by_seller"
+  | "seller_confirm_timeout";
+
 /** Trade Record Output Interface */
 export interface TradeRecordIn {
   trade_id: number;
@@ -26,8 +39,8 @@ export interface TradeRecordIn {
   accepted_time: number;
   confirmed_time: number;
   completed_time: number;
-  state: "pending" | "processsing" | "confirmed" | "completed" | "cancelled";
-  cancel_reason?: "buyer_cancelled" | "seller_cancelled" | "seller_rejected";
+  state: TransactionState;
+  cancel_reason?: TransactionCancelReason;
 }
 
 /** Trades Filter Type Interface */
