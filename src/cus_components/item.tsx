@@ -107,7 +107,7 @@ export function ItemCard(props: ItemCardProps) {
         "mark-item-flex-box",
         widthTw,
         // Spacing
-        "flex-col flex-none items-start justify-start text-start",
+        "flex-none flex-col items-start justify-start text-start",
         // Rounded
         "rounded-2xl",
         // Hover effect when clickable
@@ -239,7 +239,7 @@ export function AdaptiveItemGrid(props: AdaptiveItemGridProps) {
 
   if (itemInfoList.length === 0) {
     return (
-      <FlexDiv className="py-4 w-full flex-none">
+      <FlexDiv className="w-full flex-none py-4">
         <ErrorCard title="无数据" description="暂无满足条件的物品"></ErrorCard>
       </FlexDiv>
     );
@@ -274,6 +274,134 @@ export function AdaptiveItemGrid(props: AdaptiveItemGridProps) {
             </div>
           </Link>
         )}
+      </FlexDiv>
+    </FlexDiv>
+  );
+}
+
+interface SearchResultItemCardProps {
+  itemInfo: ItemIn;
+}
+
+/**
+ * Component to display a search result item card for a search result page.
+ */
+export function SearchResultItemCard({ itemInfo }: SearchResultItemCardProps) {
+  const pubTimeDayJs = (dayjs as any)(itemInfo.created_time);
+  const pubTimeStr = pubTimeDayJs.format("M/DD");
+  const pubTimeToNowDiffDays = 0 - pubTimeDayJs.diff((dayjs as any)(), "day");
+
+  async function handleItemRemove() {
+    try {
+      await removeItems([itemInfo.item_id]);
+      toast.success("商品已删除，请刷新页面");
+    } catch (e) {
+      errorPopper(e);
+    }
+  }
+
+  return (
+    <Link href={`/item?item_id=${itemInfo.item_id}`}>
+      <FlexDiv
+        className={classNames(
+          "search-result-item w-full flex-none",
+          "flex flex-row items-center justify-start gap-4",
+          "rounded-xl px-4 py-2",
+          "transition-all hover:bg-bgcolor/50 dark:hover:bg-bgcolor-dark/50",
+        )}
+      >
+        {/* Picture Placeholder */}
+        <div
+          className={classNames(
+            "h-[4rem] w-[4rem]",
+            "place-content-center place-items-center bg-primary/50",
+            "rounded-lg",
+          )}
+        >
+          <p className="font-mono font-bold text-white">Image</p>
+        </div>
+
+        {/* Information Section */}
+        <FlexDiv className="flex-auto flex-col items-start justify-between">
+          {/* Name and Price Section */}
+          <FlexDiv className="w-full flex-row items-start justify-between">
+            <h3 className="truncate font-bold">
+              {itemInfo.name || "暂无物品标题"}
+            </h3>
+            <div className="text-lg font-semibold text-primary dark:text-primary-light">
+              ${itemInfo.price.toFixed(2)}
+            </div>
+          </FlexDiv>
+
+          {/* Published Time Section */}
+          <FlexDiv className="w-full flex-row items-center gap-2 text-sm opacity-50">
+            <AiOutlineClockCircle />
+            <span>
+              {pubTimeStr} ({pubTimeToNowDiffDays} 天前)
+            </span>
+          </FlexDiv>
+        </FlexDiv>
+
+        {/* More Actions Section */}
+        <Dropdown
+          menu={{
+            items: [
+              {
+                key: "edit_item",
+                icon: <AiOutlineEdit size={20} />,
+                label: (
+                  <Link
+                    href={`/user/published/add?item_id=${itemInfo.item_id}`}
+                  >
+                    编辑物品
+                  </Link>
+                ),
+              },
+              {
+                key: "remove_item",
+                danger: true,
+                onClick: (info) => {
+                  info.domEvent.stopPropagation();
+                  handleItemRemove();
+                },
+                icon: <AiOutlineDelete size={20} />,
+                label: "删除",
+              },
+            ],
+          }}
+        >
+          <IoIosMore size={20} className="cursor-pointer" />
+        </Dropdown>
+      </FlexDiv>
+    </Link>
+  );
+}
+
+interface SearchResultListProps {
+  searchResults: SearchResultItemCardProps["itemInfo"][];
+  showAllUrl: string; // URL to show all results
+}
+
+/**
+ * A component to display a list of search results with a "显示所有结果" button linking to another page.
+ */
+export function SearchResultList({
+  searchResults,
+  showAllUrl,
+}: SearchResultListProps) {
+  return (
+    <FlexDiv className="w-full flex-none flex-col items-center gap-4">
+      {/* Search Result List */}
+      <FlexDiv className="w-full flex-col gap-2">
+        {searchResults.map((itemInfo) => (
+          <SearchResultItemCard key={itemInfo.item_id} itemInfo={itemInfo} />
+        ))}
+      </FlexDiv>
+      {/* Show All Button */}
+      <FlexDiv className="w-full flex-none flex-row items-center justify-end">
+        <Link href={showAllUrl}>
+          <Button type="text">显示所有结果</Button>
+        </Link>
       </FlexDiv>
     </FlexDiv>
   );

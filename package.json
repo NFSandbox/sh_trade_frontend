@@ -26,6 +26,7 @@
     "supertokens-web-js": "^0.14.0",
     "swr": "^2.2.5",
     "use-breakpoint": "^4.0.5",
+    "use-debounce": "^10.0.4",
     "zustand": "^5.0.1"
   },
   "devDependencies": {

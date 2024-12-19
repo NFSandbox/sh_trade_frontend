@@ -28,23 +28,28 @@ interface TransactionStateTagProps {
 export function TransactionStateTag({ state }: TransactionStateTagProps) {
   let bgTwCss;
   let dispText = state as string;
+  let dispTooltip = "";
 
   if (state === "pending") {
     bgTwCss = "bg-yellow";
     dispText = "待处理";
+    dispTooltip = "等待卖家同意";
   } else if (state === "processing") {
     bgTwCss = "bg-blue";
     dispText = "处理中";
+    dispTooltip = "等待买家确认交易完成";
   } else if (state === "success") {
     bgTwCss = "bg-green";
     dispText = "已完成";
+    dispTooltip = "交易已成功完成";
   } else {
     bgTwCss = "bg-gray"; // Fallback if state is invalid or missing
     dispText = "未知状态";
+    dispTooltip = "交易状态无效或未知";
   }
 
   return (
-    <ColoredTag bgTwCss={bgTwCss} toolTip={state}>
+    <ColoredTag bgTwCss={bgTwCss} toolTip={dispTooltip}>
       {dispText}
     </ColoredTag>
   );

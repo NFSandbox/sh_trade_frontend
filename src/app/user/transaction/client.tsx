@@ -2,6 +2,8 @@
 import { useEffect, useState, useLayoutEffect, CSSProperties } from "react";
 import * as dayjs from "dayjs";
 
+import Link from "next/link";
+
 // Components
 import { FlexDiv, Center } from "@/components/container";
 import { LoadingPage, LoadingSkeleton } from "@/components/error";
@@ -124,10 +126,12 @@ function TransactionTable() {
       render: (_) => <p className="font-mono">{_}</p>,
     },
     {
-      title: "物品ID",
-      dataIndex: "item.item_id",
+      title: "物品",
+      dataIndex: "item",
       key: "item_id",
-      render: (_, rec) => <p className="font-mono">{rec.item.item_id}</p>,
+      render: (_, rec) => (
+        <Link href={`/item?item_id=${rec.item.item_id}`}>{rec.item.name}</Link>
+      ),
     },
     {
       title: "状态",

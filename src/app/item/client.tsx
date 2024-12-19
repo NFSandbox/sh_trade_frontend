@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 // Components
 import { FlexDiv, Center } from "@/components/container";
 import { Title } from "@/components/title";
-import { Button, Input, Tooltip } from "antd";
+import { Alert, Button, Input, Tooltip } from "antd";
 import { CusUserBar } from "@/cus_components/user";
 import { ItemTagsGrid } from "@/cus_components/item";
 import { ErrorCard, LoadingPage } from "@/components/error";
@@ -187,10 +187,23 @@ interface ItemDescPartProps {
 
 function ItemDescPart(props: ItemDescPartProps) {
   const { itemInfo } = props;
+  const isSold = itemInfo.state === "sold";
 
   return (
-    <FlexDiv className="w-full flex-col items-start justify-start gap-1">
+    <FlexDiv className="w-full flex-col items-start justify-start gap-x-2 gap-y-4">
       <Divider></Divider>
+      {isSold && (
+        <FlexDiv className="w-full flex-none flex-col items-center justify-start">
+          <Alert
+            closable
+            className="w-full self-center"
+            message="商品已售出"
+            description="该商品已被售出，此页面仅用于归档原物品发布信息。"
+            type="info"
+            showIcon
+          />
+        </FlexDiv>
+      )}
       <p>{itemInfo.description ?? "此物品暂无描述。"}</p>
     </FlexDiv>
   );
@@ -205,6 +218,27 @@ function ActionBarPart(props: ActionBarPartProps) {
   const itemData = props.itemInfo;
 
   const isSeller = userData?.user_id === itemData.seller.user_id;
+  const isItemSold = itemData.state === "sold";
+  const isItemValid = itemData.state === "valid";
+
+  let purchaseButtonText = "";
+  let purchaseButtonTooptip = "";
+  let shouldPurchaseButtonBeDisabled = true;
+
+  if (isSeller) {
+    purchaseButtonText = "购买";
+    purchaseButtonTooptip = "您是该商品的卖家，无法购买";
+  } else if (isItemSold) {
+    purchaseButtonText = "物品已售出";
+    purchaseButtonTooptip = "该商品已被售出";
+  } else if (isItemValid) {
+    purchaseButtonText = "购买";
+    purchaseButtonTooptip = "向卖家请求购买此物品，卖家同意后即可进行交易";
+    shouldPurchaseButtonBeDisabled = false;
+  } else {
+    purchaseButtonText = "购买";
+    purchaseButtonTooptip = "当前物品状态无效，无法购买";
+  }
 
   async function handleStartTransaction() {
     await promiseToastWithBaseErrorHandling(
@@ -217,24 +251,28 @@ function ActionBarPart(props: ActionBarPartProps) {
   return (
     <FlexDiv className="w-full flex-row items-center justify-between gap-2">
       <FlexDiv className="w-full flex-row items-center gap-2">
-        <Tooltip
-          title={isSeller ? "此物品由您发布，无法购买" : "向卖家发起购买请求"}
-        >
+        <Tooltip title={purchaseButtonTooptip}>
           <Button
             style={{ width: "100%" }}
             type="primary"
-            disabled={isSeller}
+            disabled={shouldPurchaseButtonBeDisabled}
             icon={<AiOutlineShoppingCart size={18}></AiOutlineShoppingCart>}
             onClick={handleStartTransaction}
           >
-            {isSeller ? "购买" : "购买"}
+            {purchaseButtonText}
           </Button>
         </Tooltip>
       </FlexDiv>
 
-      <Button icon={<AiOutlineHeart size={18}></AiOutlineHeart>}>收藏</Button>
+      <Button
+        disabled={shouldPurchaseButtonBeDisabled}
+        icon={<AiOutlineHeart size={18}></AiOutlineHeart>}
+      >
+        收藏
+      </Button>
       {isSeller && (
         <Button
+          disabled={shouldPurchaseButtonBeDisabled}
           href={`/user/published/add?item_id=${itemData.item_id}`}
           icon={<AiOutlineEdit size={18}></AiOutlineEdit>}
         >
