@@ -89,7 +89,7 @@ export function Client() {
         <Divider orientation="left">按标签搜索</Divider>
         {tagResults.length ? (
           <SearchResultList
-            searchResults={nameResults}
+            searchResults={tagResults}
             showAllUrl="/home"
           ></SearchResultList>
         ) : (

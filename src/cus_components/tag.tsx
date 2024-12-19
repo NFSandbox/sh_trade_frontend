@@ -31,11 +31,11 @@ export function TransactionStateTag({ state }: TransactionStateTagProps) {
   let dispTooltip = "";
 
   if (state === "pending") {
-    bgTwCss = "bg-yellow";
+    bgTwCss = "bg-primary/50";
     dispText = "待处理";
     dispTooltip = "等待卖家同意";
   } else if (state === "processing") {
-    bgTwCss = "bg-blue";
+    bgTwCss = "bg-primary";
     dispText = "处理中";
     dispTooltip = "等待买家确认交易完成";
   } else if (state === "success") {

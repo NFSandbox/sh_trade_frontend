@@ -272,7 +272,6 @@ function ActionBarPart(props: ActionBarPartProps) {
       </Button>
       {isSeller && (
         <Button
-          disabled={shouldPurchaseButtonBeDisabled}
           href={`/user/published/add?item_id=${itemData.item_id}`}
           icon={<AiOutlineEdit size={18}></AiOutlineEdit>}
         >
