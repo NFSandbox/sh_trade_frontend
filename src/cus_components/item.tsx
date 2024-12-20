@@ -460,8 +460,8 @@ export function ItemTag(props: ItemTagProps) {
     // More detailed info
     <p
       className={classNames(
-        "px-2",
-        "rounded-lg bg-primary/70 font-mono text-sm text-white",
+        "px-3 py-1",
+        "rounded-2xl bg-primary/70 font-mono text-sm text-white",
       )}
     >
       {props.tagInfo.name}
@@ -478,7 +478,7 @@ interface ItemTagsGridProps {
  */
 export function ItemTagsGrid(props: ItemTagsGridProps) {
   return (
-    <FlexDiv className={classNames("w-full flex-wrap gap-2")}>
+    <FlexDiv className={classNames("flex-none w-full flex-wrap gap-2")}>
       {props.tags.map((tag) => {
         return <ItemTag tagInfo={tag}></ItemTag>;
       })}

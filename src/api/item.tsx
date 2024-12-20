@@ -175,3 +175,40 @@ export async function removeItems(itemIdList: number[]) {
     apiErrorThrower(e);
   }
 }
+
+// API function to fetch recently published items
+export async function getRecentlyPublished() {
+  try {
+    const res = await axiosIns.get("/item/recent");
+    return res.data as ItemIn[]; // Response is a list of ItemIn objects
+  } catch (e) {
+    apiErrorThrower(e);
+  }
+}
+
+// SWR hook to fetch and cache recently published items
+export function useRecentlyPublished() {
+  return useSWR("/item/recent", getRecentlyPublished, {
+    keepPreviousData: true,
+  });
+}
+
+/**
+ * SWR hook for recently active tags in recently published items.
+ */
+export function useRecentlyActiveTags() {
+  const { data: recentItems, error } = useRecentlyPublished();
+
+  const tags = recentItems
+    ? recentItems.flatMap((item) => item.tags.map((tag) => tag))
+    : [];
+
+  // Remove duplicates from tags
+  const uniqueTags = Array.from(new Set(tags));
+
+  return {
+    tags: uniqueTags,
+    isLoading: !recentItems && !error,
+    error,
+  };
+}

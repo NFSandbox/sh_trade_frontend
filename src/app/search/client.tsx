@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { classNames } from "@/tools/css_tools";
 import { useDebounce } from "use-debounce";
 
+import { useHeaderTitle } from "@/states/layoutState";
+
 // Components
 import { Input, Button, List, Divider, Tooltip } from "antd";
 import { FlexDiv, Center } from "@/components/container";
@@ -14,6 +16,8 @@ import { searchItemsByName, searchItemsByTags } from "@/api/search";
 import { ItemIn } from "@/api/item";
 
 export function Client() {
+  useHeaderTitle("物品搜索");
+
   const [searchKeyword, setSearchKeyword] = useState("");
   const [debouncedKeyword, setDebouncedKeyword] = useDebounce(
     searchKeyword,
