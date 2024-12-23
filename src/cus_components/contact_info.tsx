@@ -5,7 +5,7 @@ import { useEffect, useState, useLayoutEffect, CSSProperties } from "react";
 import { FlexDiv, Center } from "@/components/container";
 import { Button, Input } from "antd";
 import { LoadingPage, LoadingSkeleton } from "@/components/error";
-import { Avatar, Typography, Tooltip } from "antd";
+import { Avatar, Typography, Tooltip, Popconfirm } from "antd";
 import { Title } from "@/components/title";
 const { Paragraph } = Typography;
 import { PageSegment } from "@/cus_components/pages";
@@ -128,17 +128,22 @@ export function ContactInfoItem(props: ContactInfoItemProps) {
         {/* Actions */}
         {props.onRemove && (
           <div className="justify-self-end px-4">
-            <Button
-              type="default"
-              loading={isRemoving}
-              onClick={(e) => {
+            <Popconfirm
+              placement="left"
+              title="删除联系方式"
+              description="此操作不可恢复，您确定要删除这个联系方式吗？"
+              onConfirm={(e) => {
                 // prevent the click event propagating, which may break click-to-copy feature.
-                e.stopPropagation();
+                e?.stopPropagation();
                 onRemovalCallback();
               }}
+              okText="删除"
+              cancelText="取消"
             >
-              <AiOutlineDelete size={20} />
-            </Button>
+              <Button type="default" danger loading={isRemoving}>
+                <AiOutlineDelete size={20} />
+              </Button>
+            </Popconfirm>
           </div>
         )}
       </div>

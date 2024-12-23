@@ -48,7 +48,7 @@ export function LayoutTests() {
         "pt-4", // Initial top padding to avoid content too close to header bar.
       )}
     >
-      <FlexDiv expand className="max-w-[50rem] flex-none flex-col gap-4">
+      <FlexDiv expand className="max-w-[65rem] flex-none flex-col gap-4">
         {/* Quick Action Bar  */}
         <FlexDiv className={classNames("w-full flex-none flex-row gap-4")}>
           <QuickActionBlock

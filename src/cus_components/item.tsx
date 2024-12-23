@@ -478,7 +478,7 @@ interface ItemTagsGridProps {
  */
 export function ItemTagsGrid(props: ItemTagsGridProps) {
   return (
-    <FlexDiv className={classNames("flex-none w-full flex-wrap gap-2")}>
+    <FlexDiv className={classNames("w-full flex-none flex-wrap gap-2")}>
       {props.tags.map((tag) => {
         return <ItemTag tagInfo={tag}></ItemTag>;
       })}
@@ -564,7 +564,7 @@ export function ItemEditForm(props: ItemEditFormProps) {
         label="价格"
         name="price"
         rules={[
-          { required: true, message: "请输入价格!" },
+          { required: true, message: "请输入合法的数字代表价格!" },
           { type: "number", min: 0, message: "价格必须为正数!" },
         ]}
       >

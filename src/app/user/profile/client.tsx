@@ -4,7 +4,16 @@ import { useEffect, useState, useLayoutEffect } from "react";
 // Components
 import { FlexDiv, Center } from "@/components/container";
 import { LoadingPage, LoadingSkeleton } from "@/components/error";
-import { Avatar, Typography, Form, Button, Input, Select, Space } from "antd";
+import {
+  Avatar,
+  Typography,
+  Form,
+  Button,
+  Input,
+  Select,
+  Space,
+  Popconfirm,
+} from "antd";
 const { useForm } = Form;
 import { Title } from "@/components/title";
 const { Paragraph } = Typography;
@@ -16,6 +25,7 @@ import {
   AiOutlineQq,
   AiOutlineWechat,
   AiOutlineDelete,
+  AiOutlineUserAdd,
 } from "react-icons/ai";
 
 // States
@@ -243,6 +253,7 @@ function ContactInfoSegment() {
         )}
       >
         <Button
+          icon={<AiOutlineUserAdd size={20}></AiOutlineUserAdd>}
           onClick={() => {
             setAddTriggered();
           }}

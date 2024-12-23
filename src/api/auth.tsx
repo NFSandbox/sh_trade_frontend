@@ -29,6 +29,7 @@ export interface UserIn {
   username: string;
   description: string | null; // assuming description can be a string or null
   created_time: number; // assuming created_time is a timestamp in milliseconds
+  role_name_list: string[]; // List of string, contains all role name of this user
 }
 
 /**

@@ -83,7 +83,7 @@ export function Client() {
     <FlexDiv
       expand
       className={classNames(
-        "flex-col items-center justify-start gap-4",
+        "flex-none flex-col items-center justify-start gap-4",
         "bg-fgcolor dark:bg-fgcolor-dark",
         "overflow-auto",
         "pt-4", // Initial top padding to avoid content too close to header bar.
@@ -91,6 +91,7 @@ export function Client() {
     >
       <FlexDiv
         className={classNames(
+          "flex-none",
           "p-4",
           "flex-col items-start justify-start gap-4",
           "w-full max-w-[50rem]",
@@ -101,6 +102,19 @@ export function Client() {
 
         {/* Item Desc  */}
         <ItemDescPart itemInfo={data}></ItemDescPart>
+
+        {/* Image Placeholder  */}
+        <FlexDiv
+          className={classNames(
+            "flex-none font-mono",
+            "bg-primary/70 text-white",
+            "flex-col items-center justify-center",
+            "min-h-[20rem] w-full",
+            "rounded-2xl",
+          )}
+        >
+          Image Placeholder
+        </FlexDiv>
 
         {/* Action Bar  */}
         <ActionBarPart itemInfo={data}></ActionBarPart>
@@ -190,7 +204,7 @@ function ItemDescPart(props: ItemDescPartProps) {
   const isSold = itemInfo.state === "sold";
 
   return (
-    <FlexDiv className="w-full flex-col items-start justify-start gap-x-2 gap-y-4">
+    <FlexDiv className="w-full flex-none flex-col items-start justify-start gap-x-2 gap-y-4">
       <Divider></Divider>
       {isSold && (
         <FlexDiv className="w-full flex-none flex-col items-center justify-start">
