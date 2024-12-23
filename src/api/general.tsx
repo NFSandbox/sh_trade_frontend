@@ -6,5 +6,5 @@ export interface PaginationConfig {
 export interface PaginatedResult<ItemType> {
   total: number;
   pagination: PaginationConfig;
-  results: ItemType[];
+  data: ItemType[];
 }

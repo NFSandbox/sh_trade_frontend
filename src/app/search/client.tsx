@@ -46,8 +46,8 @@ export function Client() {
           }),
         ]);
 
-        setNameResults(nameRes?.results || []);
-        setTagResults(tagRes?.results || []);
+        setNameResults((nameRes as any)?.results || []);
+        setTagResults((tagRes as any)?.results || []);
       } catch (error) {
         console.error("Error fetching search results:", error);
       }

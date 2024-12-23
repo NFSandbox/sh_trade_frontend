@@ -264,6 +264,11 @@ function ActionBarPart(props: ActionBarPartProps) {
 
   return (
     <FlexDiv className="w-full flex-row items-center justify-between gap-2">
+      <FlexDiv className="flex-none flex-row items-baseline gap-1 px-2">
+        <p className="opacity-50">$</p>
+        <p className="text-xl text-primary">{itemData.price.toFixed(2)}</p>
+      </FlexDiv>
+
       <FlexDiv className="w-full flex-row items-center gap-2">
         <Tooltip title={purchaseButtonTooptip}>
           <Button
