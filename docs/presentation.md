@@ -4,16 +4,24 @@ title: AHUER.com 校园二手物品交易系统
 paginate: true
 ---
 
-# 校园二手交易系统
+# 校园二手交易系统 AHUER.COM
+
+周裕佳，齐子祥，费彦棋，钱锦程，袁宏锐，李若凡
 
 ---
 
-- 场景
-- 界面设计
+# 目录
+
+- 系统概要
+- 页面设计展示
+- 视频展示
+- 设计要点说明
 
 ---
 
-# 用户角色分析
+# 系统概要
+
+一个面相校园的二手物品交易看板网站。
 
 ---
 
@@ -56,7 +64,7 @@ paginate: true
 
 ---
 
-# 登录/注册
+# 账户登录
 
 ---
 
@@ -93,7 +101,7 @@ paginate: true
 
 ---
 
-# todo
+![w:1000](./assets/home_page.png)
 
 ---
 
@@ -197,11 +205,25 @@ paginate: true
 
 ---
 
-# 主页
+# 交易处理页
 
 ---
 
-![](./assets/home.png)
+**业务逻辑** *https://wiki.api.ahuer.com/Transaction-Design*
+
+![w:1000](./assets/transaction_business_logic.png)
+
+---
+
+![](./assets/transaction_main.png)
+
+---
+
+# 搜索页面
+
+---
+
+![w:1000](./assets/home_page.png)
 
 ---
 
@@ -213,15 +235,27 @@ paginate: true
 
 用户持续输入文字。系统监听用户输入，持续更新临时变量。
 
-用户停止输入一段时间（e.g.: `1s`）后，自动发送搜索请求。
+用户停止输入一段时间（e.g.: `1s`）后，自动发送搜索请求 _(Debouncing)_。
+
+---
+
+# 视频演示
+
+通过录屏，简要展示系统的可用性和主要功能。
+
+> `./assets/ahuer_demo_video.mp4`
 
 ---
 
 # 其他设计细节
 
+对上方页面展示中提到的设计要点进行补充说明，同时介绍系统部分其他亮点。
+
 ---
 
 # Full DarkMode Support
+
+100% 全组件和页面覆盖的深色模式支持，并自动跟随用户系统设置关闭或开启。
 
 ---
 
@@ -239,6 +273,8 @@ paginate: true
 
 # Loading Skeleton
 
+页面加载时展示内容骨架或其他加载图像，为用户提供合理的反馈。
+
 ---
 
 ![w:1000](./assets/loading_skeleton.png)
@@ -250,6 +286,8 @@ paginate: true
 ---
 
 # **Responsive** Design
+
+重要组件实现响应式设计，为不同分辨率/大小的屏幕提供个性化和舒适的浏览体验。
 
 ---
 
@@ -271,6 +309,9 @@ paginate: true
 
 # 统一性
 
+元素，组件，设计元素 (Design Token) 尽量保持一致，实现相对统一的设计风格，
+为用户提供统一的浏览体验。
+
 ---
 
 ![](./assets/layout_1.png)
@@ -281,6 +322,31 @@ paginate: true
 
 ---
 
+# 自动化测试
+
+开发过程中尽可能为重要模块添加单元测试/自动化测试流程，确保程序可用性和
+低错误率。
+
+---
+
+![w:1000](./assets/api_test.png)
+
+---
+
+![w:1000](./assets/api_test_res.png)
+
+---
+
+# Interactive API References
+
+面相前端 UI/UX 开发者的交互式 API 文档与测试工具。
+
+---
+
+![w:1000](./assets/api_ref_doc.png)
+
+---
+
 # More
 
 - **组件统一性**
@@ -288,7 +354,7 @@ paginate: true
   - 自定义组件统一 (`ItemCard`, `ItemListGrid`, ...)
 - **布局统一性**
   - 合理的 `Layout` 重用
-  - 统一的间隔标准 (`Padding`, `Gap`, ...)
+  - 统一的 Design Token (`Padding`, `Gap`, ...)
 
 ---
 
